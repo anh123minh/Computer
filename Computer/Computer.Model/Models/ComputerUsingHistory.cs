@@ -5,7 +5,7 @@ using Computer.Model.Abstract;
 
 namespace Computer.Model.Models
 {
-    [Table("ComputerTypes")]
+    [Table("ComputerUsingHistories")]
     public class ComputerUsingHistory : Auditable
     {
         [Key]

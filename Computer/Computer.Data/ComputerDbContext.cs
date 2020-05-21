@@ -6,10 +6,16 @@ namespace Computer.Data
 {
     public class ComputerDbContext : IdentityDbContext<AppUser>
     {
-        public ComputerDbContext() : base("TeduShopConnection")
+        public ComputerDbContext() : base("ComputerConnection")
         {
             this.Configuration.LazyLoadingEnabled = false;
         }
+
+        public DbSet<Model.Models.Computer> Computers { set; get; }
+        public DbSet<ComputerType> ComputerTypes { set; get; }
+        public DbSet<ProducerType> ProducerTypes { set; get; }
+        public DbSet<DeparmentType> DeparmentTypes { set; get; }
+        public DbSet<ComputerUsingHistory> ComputerUsingHistories { set; get; }
 
         //public DbSet<Footer> Footers { set; get; }
         //public DbSet<Order> Orders { set; get; }
