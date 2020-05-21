@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnnouncementService.cs" />
+    <Compile Include="ComputerService.cs" />
     <Compile Include="ErrorService.cs" />
     <Compile Include="FunctionService.cs" />
     <Compile Include="PermissionService.cs" />
