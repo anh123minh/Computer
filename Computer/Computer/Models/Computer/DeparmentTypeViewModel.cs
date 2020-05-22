@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Computer.Models
+namespace Computer.Models.Computer
 {
-    public class ProducerTypeViewModel
+    public class DeparmentTypeViewModel
     {
-        public int ProducerTypeId { get; set; }
+        public int DeparmentTypeId { get; set; }
 
-        public string ProducerTypeCode { get; set; }
+        public string DeparmentTypeCode { get; set; }
 
-        public string ProducerTypeName { get; set; }
+        public string DeparmentTypeName { get; set; }
 
-        public string ProducerTypeDescription { get; set; }
+        public string DeparmentTypeDescription { get; set; }
 
         public virtual IEnumerable<ComputerViewModel> Computers { get; set; }
 

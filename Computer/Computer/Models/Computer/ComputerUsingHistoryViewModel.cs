@@ -1,20 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Computer.Models
+namespace Computer.Models.Computer
 {
-    public class ComputerTypeViewModel
+    public class ComputerUsingHistoryViewModel
     {
-        public int ComputerTypeId { get; set; }
+        public int ComputerUsingHistoryId { get; set; }
 
-        public string ComputerTypeCode { get; set; }
+        public int ComputerId { get; set; }
 
-        public string ComputerTypeName { get; set; }
+        public DateTime? StartTime { get; set; }
 
-        public string ComputerTypeDescription { get; set; }
+        public DateTime? EndTime { get; set; }
 
-        public virtual IEnumerable<ComputerViewModel> Computers { get; set; }
+        public string UserId { get; set; }
+
+        public virtual ComputerViewModel Computer { get; set; }
+
+        //public virtual AppUserViewModel User { get; set; }
 
         public DateTime? CreatedDate { set; get; }
 

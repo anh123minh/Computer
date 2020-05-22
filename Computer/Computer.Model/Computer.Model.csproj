@@ -59,17 +59,16 @@
   <ItemGroup>
     <Compile Include="Abstract\Auditable.cs" />
     <Compile Include="Abstract\IAuditable.cs" />
-    <Compile Include="Models\Announcement.cs" />
-    <Compile Include="Models\AnnouncementUser.cs" />
-    <Compile Include="Models\AppRole.cs" />
-    <Compile Include="Models\AppUser.cs" />
+    <Compile Include="Models\ApplicationGroup.cs" />
+    <Compile Include="Models\ApplicationRole.cs" />
+    <Compile Include="Models\ApplicationRoleGroup.cs" />
+    <Compile Include="Models\ApplicationUser.cs" />
+    <Compile Include="Models\ApplicationUserGroup.cs" />
     <Compile Include="Models\Computer.cs" />
     <Compile Include="Models\ComputerType.cs" />
     <Compile Include="Models\ComputerUsingHistory.cs" />
     <Compile Include="Models\DeparmentType.cs" />
     <Compile Include="Models\Error.cs" />
-    <Compile Include="Models\Function.cs" />
-    <Compile Include="Models\Permission.cs" />
     <Compile Include="Models\ProducerType.cs" />
     <Compile Include="Models\SystemConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

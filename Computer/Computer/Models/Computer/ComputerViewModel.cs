@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Computer.Models
+namespace Computer.Models.Computer
 {
     public class ComputerViewModel
     {

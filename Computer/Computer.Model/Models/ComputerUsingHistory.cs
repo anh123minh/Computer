@@ -28,6 +28,6 @@ namespace Computer.Model.Models
         public virtual Computer Computer { get; set; }
 
         [ForeignKey("UserId")]
-        public virtual AppUser User { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
     }
 }
