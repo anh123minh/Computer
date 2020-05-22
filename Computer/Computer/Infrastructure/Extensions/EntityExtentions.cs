@@ -1,22 +1,21 @@
-﻿using System;
-using System.Globalization;
-using Computer.Model.Models;
+﻿using Computer.Model.Models;
 using Computer.Models;
+using Computer.Models.System;
 
 namespace Computer.Infrastructure.Extensions
 {
     public static class EntityExtensions
     {
-        public static void UpdatePostCategory(this Model.Models.Computer computer, ComputerViewModel computerVm)
+        public static void UpdateComputer(this Model.Models.Computer computer, ComputerViewModel computerVm)
         {
-            computer.ComputerId = computerVm.ID;
-            computer.ComputerCode = computerVm.Name;
-            computer.ComputerName = computerVm.Description;
-            computer.ComputerDescription = computerVm.Alias;
-            computer.ComputerTypeId = computerVm.ParentID;
-            computer.ProducerTypeId = computerVm.DisplayOrder;
-            computer.DeparmentTypeId = computerVm.Image;
-            computer.IsBusyNow = computerVm.HomeFlag;
+            computer.ComputerId = computerVm.ComputerId;
+            computer.ComputerCode = computerVm.ComputerCode;
+            computer.ComputerName = computerVm.ComputerName;
+            computer.ComputerDescription = computerVm.ComputerDescription;
+            computer.ComputerTypeId = computerVm.ComputerTypeId;
+            computer.ProducerTypeId = computerVm.ProducerTypeId;
+            computer.DeparmentTypeId = computerVm.DeparmentTypeId;
+            computer.IsBusyNow = computerVm.IsBusyNow;
 
             computer.CreatedDate = computerVm.CreatedDate;
             computer.CreatedBy = computerVm.CreatedBy;
@@ -48,34 +47,34 @@ namespace Computer.Infrastructure.Extensions
             permission.CanUpdate = permissionVm.CanUpdate;
         }
 
-        public static void UpdateApplicationRole(this AppRole appRole, ApplicationRoleViewModel appRoleViewModel, string action = "add")
-        {
-            if (action == "update")
-                appRole.Id = appRoleViewModel.Id;
-            else
-                appRole.Id = Guid.NewGuid().ToString();
-            appRole.Name = appRoleViewModel.Name;
-            appRole.Description = appRoleViewModel.Description;
-        }
+        //public static void UpdateApplicationRole(this AppRole appRole, ApplicationRoleViewModel appRoleViewModel, string action = "add")
+        //{
+        //    if (action == "update")
+        //        appRole.Id = appRoleViewModel.Id;
+        //    else
+        //        appRole.Id = Guid.NewGuid().ToString();
+        //    appRole.Name = appRoleViewModel.Name;
+        //    appRole.Description = appRoleViewModel.Description;
+        //}
 
-        public static void UpdateUser(this AppUser appUser, AppUserViewModel appUserViewModel, string action = "add")
-        {
-            appUser.Id = appUserViewModel.Id;
-            appUser.FullName = appUserViewModel.FullName;
-            if (!string.IsNullOrEmpty(appUserViewModel.BirthDay))
-            {
-                DateTime dateTime = DateTime.ParseExact(appUserViewModel.BirthDay, "dd/MM/yyyy", new CultureInfo("vi-VN"));
-                appUser.BirthDay = dateTime;
-            }
+        //public static void UpdateUser(this AppUser appUser, AppUserViewModel appUserViewModel, string action = "add")
+        //{
+        //    appUser.Id = appUserViewModel.Id;
+        //    appUser.FullName = appUserViewModel.FullName;
+        //    if (!string.IsNullOrEmpty(appUserViewModel.BirthDay))
+        //    {
+        //        DateTime dateTime = DateTime.ParseExact(appUserViewModel.BirthDay, "dd/MM/yyyy", new CultureInfo("vi-VN"));
+        //        appUser.BirthDay = dateTime;
+        //    }
 
-            appUser.Email = appUserViewModel.Email;
-            appUser.Address = appUserViewModel.Address;
-            appUser.UserName = appUserViewModel.UserName;
-            appUser.PhoneNumber = appUserViewModel.PhoneNumber;
-            appUser.Gender = appUserViewModel.Gender == "True" ? true : false;
-            appUser.Status = appUserViewModel.Status;
-            appUser.Address = appUserViewModel.Address;
-            appUser.Avatar = appUserViewModel.Avatar;
-        }
+        //    appUser.Email = appUserViewModel.Email;
+        //    appUser.Address = appUserViewModel.Address;
+        //    appUser.UserName = appUserViewModel.UserName;
+        //    appUser.PhoneNumber = appUserViewModel.PhoneNumber;
+        //    appUser.Gender = appUserViewModel.Gender == "True" ? true : false;
+        //    appUser.Status = appUserViewModel.Status;
+        //    appUser.Address = appUserViewModel.Address;
+        //    appUser.Avatar = appUserViewModel.Avatar;
+        //}
     }
 }

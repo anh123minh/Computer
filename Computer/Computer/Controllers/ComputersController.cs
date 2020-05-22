@@ -5,9 +5,6 @@ using System.Net.Http;
 using System.Web.Http;
 using Computer.Infrastructure.Core;
 using Computer.Service;
-using Computer.Model.Models;
-using Computer.Service;
-using Computer.Infrastructure.Core;
 using Computer.Infrastructure.Extensions;
 using Computer.Models;
 
@@ -30,11 +27,11 @@ namespace Computer.Controllers
         {
             return CreateHttpResponse(request, () =>
             {
-                var listCategory = _computerService.GetAll();
+                var listComputer = _computerService.GetAll();
 
-                var listPostCategoryVm = Mapper.Map<List<ComputerViewModel>>(listCategory);
+                var listComputerVm = Mapper.Map<List<ComputerViewModel>>(listComputer);
 
-                HttpResponseMessage response = request.CreateResponse(HttpStatusCode.OK, listPostCategoryVm);
+                HttpResponseMessage response = request.CreateResponse(HttpStatusCode.OK, listComputerVm);
 
                 return response;
             });
@@ -76,7 +73,7 @@ namespace Computer.Controllers
                 }
                 else
                 {
-                    var computerDb = _computerService.GetById(computerVm.ID);
+                    var computerDb = _computerService.GetById(computerVm.ComputerId);
                     computerDb.UpdateComputer(computerVm);
                     _computerService.Update(computerDb);
                     _computerService.Save();
