@@ -69,14 +69,21 @@
     <Compile Include="Migrations\202005212009382_InitialDB.designer.cs">
       <DependentUpon>202005212009382_InitialDB.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202005221412101_ModifiedDb.cs" />
+    <Compile Include="Migrations\202005221412101_ModifiedDb.designer.cs">
+      <DependentUpon>202005221412101_ModifiedDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005221424117_ModifiedDb1.cs" />
+    <Compile Include="Migrations\202005221424117_ModifiedDb1.designer.cs">
+      <DependentUpon>202005221424117_ModifiedDb1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\AnnouncementRepository.cs" />
-    <Compile Include="Repositories\AnnouncementUserRepository.cs" />
     <Compile Include="Repositories\ComputerRepository.cs" />
+    <Compile Include="Repositories\ComputerTypeRepository.cs" />
+    <Compile Include="Repositories\DeparmentTypeRepository.cs" />
     <Compile Include="Repositories\ErrorRepository.cs" />
-    <Compile Include="Repositories\FunctionRepository.cs" />
-    <Compile Include="Repositories\PermissionRepository.cs" />
+    <Compile Include="Repositories\ProducerTypeRepository.cs" />
     <Compile Include="Repositories\SystemConfigRepository.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -96,6 +103,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202005212009382_InitialDB.resx">
       <DependentUpon>202005212009382_InitialDB.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005221412101_ModifiedDb.resx">
+      <DependentUpon>202005221412101_ModifiedDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005221424117_ModifiedDb1.resx">
+      <DependentUpon>202005221424117_ModifiedDb1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

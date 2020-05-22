@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Computer.Model.Models;
-using Computer.Models;
+using Computer.Models.Computer;
 
 namespace Computer.Mappings
 {
@@ -15,12 +15,6 @@ namespace Computer.Mappings
                 cfg.CreateMap<ProducerType, ProducerTypeViewModel>().MaxDepth(2);
                 cfg.CreateMap<DeparmentType, DeparmentTypeViewModel>().MaxDepth(2);
                 cfg.CreateMap<ComputerUsingHistory, ComputerUsingHistoryViewModel>().MaxDepth(2);
-                //cfg.CreateMap<AppRole, ApplicationRoleViewModel>().MaxDepth(2);
-                //cfg.CreateMap<AppUser, AppUserViewModel>().MaxDepth(2);
-                //cfg.CreateMap<Function, FunctionViewModel>().MaxDepth(2);
-                //cfg.CreateMap<Permission, PermissionViewModel>().MaxDepth(2);
-                //cfg.CreateMap<Announcement, AnnouncementViewModel>().MaxDepth(2);
-                //cfg.CreateMap<AnnouncementUser, AnnouncementUserViewModel>().MaxDepth(2);
             });
         }
     }
