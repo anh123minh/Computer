@@ -1,6 +1,5 @@
 ﻿using Computer.Model.Models;
-using Computer.Models;
-using Computer.Models.System;
+using Computer.Models.Computer;
 
 namespace Computer.Infrastructure.Extensions
 {
@@ -25,26 +24,53 @@ namespace Computer.Infrastructure.Extensions
             computer.MetaDescription = computerVm.MetaDescription;
             computer.Status = computerVm.Status;
         }
-        
-        public static void UpdateFunction(this Function function, FunctionViewModel functionVm)
+
+        public static void UpdateComputerType(this ComputerType computerType, ComputerTypeViewModel computerTypeVm)
         {
-            function.Name = functionVm.Name;
-            function.DisplayOrder = functionVm.DisplayOrder;
-            function.IconCss = functionVm.IconCss;
-            function.Status = functionVm.Status;
-            function.ParentId = functionVm.ParentId;
-            function.Status = functionVm.Status;
-            function.URL = functionVm.URL;
-            function.ID = functionVm.ID;
+            computerType.ComputerTypeId = computerTypeVm.ComputerTypeId;
+            computerType.ComputerTypeCode = computerTypeVm.ComputerTypeCode;
+            computerType.ComputerTypeName = computerTypeVm.ComputerTypeName;
+            computerType.ComputerTypeDescription = computerTypeVm.ComputerTypeDescription;
+
+            computerType.CreatedDate = computerTypeVm.CreatedDate;
+            computerType.CreatedBy = computerTypeVm.CreatedBy;
+            computerType.UpdatedDate = computerTypeVm.UpdatedDate;
+            computerType.UpdatedBy = computerTypeVm.UpdatedBy;
+            computerType.MetaKeyword = computerTypeVm.MetaKeyword;
+            computerType.MetaDescription = computerTypeVm.MetaDescription;
+            computerType.Status = computerTypeVm.Status;
         }
-        public static void UpdatePermission(this Permission permission, PermissionViewModel permissionVm)
+
+        public static void UpdateDeparmentType(this DeparmentType computerType, DeparmentTypeViewModel computerTypeVm)
         {
-            permission.RoleId = permissionVm.RoleId;
-            permission.FunctionId = permissionVm.FunctionId;
-            permission.CanCreate = permissionVm.CanCreate;
-            permission.CanDelete = permissionVm.CanDelete;
-            permission.CanRead = permissionVm.CanRead;
-            permission.CanUpdate = permissionVm.CanUpdate;
+            computerType.DeparmentTypeId = computerTypeVm.DeparmentTypeId;
+            computerType.DeparmentTypeCode = computerTypeVm.DeparmentTypeCode;
+            computerType.DeparmentTypeName = computerTypeVm.DeparmentTypeName;
+            computerType.DeparmentTypeDescription = computerTypeVm.DeparmentTypeDescription;
+
+            computerType.CreatedDate = computerTypeVm.CreatedDate;
+            computerType.CreatedBy = computerTypeVm.CreatedBy;
+            computerType.UpdatedDate = computerTypeVm.UpdatedDate;
+            computerType.UpdatedBy = computerTypeVm.UpdatedBy;
+            computerType.MetaKeyword = computerTypeVm.MetaKeyword;
+            computerType.MetaDescription = computerTypeVm.MetaDescription;
+            computerType.Status = computerTypeVm.Status;
+        }
+
+        public static void UpdateProducerType(this ProducerType computerType, ProducerTypeViewModel computerTypeVm)
+        {
+            computerType.ProducerTypeId = computerTypeVm.ProducerTypeId;
+            computerType.ProducerTypeCode = computerTypeVm.ProducerTypeCode;
+            computerType.ProducerTypeName = computerTypeVm.ProducerTypeName;
+            computerType.ProducerTypeDescription = computerTypeVm.ProducerTypeDescription;
+
+            computerType.CreatedDate = computerTypeVm.CreatedDate;
+            computerType.CreatedBy = computerTypeVm.CreatedBy;
+            computerType.UpdatedDate = computerTypeVm.UpdatedDate;
+            computerType.UpdatedBy = computerTypeVm.UpdatedBy;
+            computerType.MetaKeyword = computerTypeVm.MetaKeyword;
+            computerType.MetaDescription = computerTypeVm.MetaDescription;
+            computerType.Status = computerTypeVm.Status;
         }
 
         //public static void UpdateApplicationRole(this AppRole appRole, ApplicationRoleViewModel appRoleViewModel, string action = "add")

@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Web;
-using System.Web.Http;
-using System.Web.Mvc;
+﻿using Microsoft.Owin;
+using Owin;
 using Autofac;
+using System.Reflection;
+using Computer.Data.Infrastructure;
+using Computer.Data.Repositories;
+using Computer.Service;
+using System.Web.Mvc;
+using System.Web.Http;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using Computer.Data;
-using Computer.Data.Infrastructure;
-using Computer.Data.Repositories;
-using Computer.Model.Models;
-using Computer.Service;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.Owin;
+using Computer.Model.Models;
 using Microsoft.Owin.Security.DataProtection;
-using Owin;
+using System.Web;
 
 [assembly: OwinStartup(typeof(Computer.Startup))]
 
@@ -27,32 +23,29 @@ namespace Computer
     {
         public void Configuration(IAppBuilder app)
         {
+            // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=316888
             ConfigAutofac(app);
             ConfigureAuth(app);
         }
-
         private void ConfigAutofac(IAppBuilder app)
         {
             var builder = new ContainerBuilder();
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
             // Register your Web API controllers.
-            builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+            builder.RegisterApiControllers(Assembly.GetExecutingAssembly()); //Register WebApi Controllers
 
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
             builder.RegisterType<DbFactory>().As<IDbFactory>().InstancePerRequest();
 
             builder.RegisterType<ComputerDbContext>().AsSelf().InstancePerRequest();
-            builder.RegisterType<RoleStore<AppRole>>().As<IRoleStore<AppRole, string>>();
 
             //Asp.net Identity
-            //builder.RegisterType<ApplicationUserStore>().As<IUserStore<AppUser>>().InstancePerRequest();
+            builder.RegisterType<ApplicationUserStore>().As<IUserStore<ApplicationUser>>().InstancePerRequest();
             builder.RegisterType<ApplicationUserManager>().AsSelf().InstancePerRequest();
-            //builder.RegisterType<ApplicationSignInManager>().AsSelf().InstancePerRequest();
-
-            //builder.RegisterType<ApplicationRoleManager>().AsSelf().InstancePerRequest();
-
+            builder.RegisterType<ApplicationSignInManager>().AsSelf().InstancePerRequest();
             builder.Register(c => HttpContext.Current.GetOwinContext().Authentication).InstancePerRequest();
             builder.Register(c => app.GetDataProtectionProvider()).InstancePerRequest();
+
 
             // Repositories
             builder.RegisterAssemblyTypes(typeof(ComputerRepository).Assembly)
@@ -67,8 +60,8 @@ namespace Computer
             Autofac.IContainer container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 
-            //Set the WebApi DependencyResolver
-            GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver((IContainer)container); 
+            GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver((IContainer)container); //Set the WebApi DependencyResolver
+
         }
     }
 }

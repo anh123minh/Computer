@@ -6,7 +6,7 @@ using System.Web.Http;
 using Computer.Infrastructure.Core;
 using Computer.Service;
 using Computer.Infrastructure.Extensions;
-using Computer.Models;
+using Computer.Models.Computer;
 
 namespace Computer.Controllers
 {
