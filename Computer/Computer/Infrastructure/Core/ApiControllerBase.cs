@@ -7,8 +7,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Computer.Model.Models;
 using Computer.Service;
-
-//using Computer.App_Start;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace Computer.Infrastructure.Core
 {
@@ -23,21 +22,21 @@ namespace Computer.Infrastructure.Core
 
         //Code removed from brevity
 
-        //protected ApplicationRoleManager AppRoleManager
-        //{
-        //    get
-        //    {
-        //        return Request.GetOwinContext().GetUserManager<ApplicationRoleManager>();
-        //    }
-        //}
+        protected ApplicationRoleManager AppRoleManager
+        {
+            get
+            {
+                return Request.GetOwinContext().GetUserManager<ApplicationRoleManager>();
+            }
+        }
 
-        //protected ApplicationUserManager AppUserManager
-        //{
-        //    get
-        //    {
-        //        return Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
-        //    }
-        //}
+        protected ApplicationUserManager AppUserManager
+        {
+            get
+            {
+                return Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+        }
 
         protected HttpResponseMessage CreateHttpResponse(HttpRequestMessage requestMessage, Func<HttpResponseMessage> function)
         {
