@@ -1,4 +1,6 @@
-﻿namespace Computer.Models
+﻿using Computer.Models.Common;
+
+namespace Computer.Models.Product
 {
     public class ProductTagViewModel
     {

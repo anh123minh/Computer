@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TeduShop.Web.Models
+namespace Computer.Models.System
 {
     public class ExternalLoginListViewModel
     {

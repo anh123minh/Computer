@@ -1,4 +1,4 @@
-﻿namespace Computer.Models
+﻿namespace Computer.Models.Common
 {
     public class TagViewModel
     {

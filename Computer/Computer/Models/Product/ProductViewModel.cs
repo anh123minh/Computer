@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Computer.Models
+namespace Computer.Models.Product
 {
     [Serializable]
     public class ProductViewModel

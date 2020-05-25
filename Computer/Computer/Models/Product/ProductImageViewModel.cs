@@ -1,4 +1,4 @@
-﻿namespace Computer.Models
+﻿namespace Computer.Models.Product
 {
     public class ProductImageViewModel
     {

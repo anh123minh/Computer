@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TeduShop.Web.Models
+namespace Computer.Models.System
 {
     public class ApplicationGroupViewModel
     {

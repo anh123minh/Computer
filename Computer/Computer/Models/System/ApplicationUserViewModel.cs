@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web;
+﻿using System.Collections.Generic;
 
-namespace TeduShop.Web.Models
+namespace Computer.Models.System
 {
     public class AppUserViewModel
     {

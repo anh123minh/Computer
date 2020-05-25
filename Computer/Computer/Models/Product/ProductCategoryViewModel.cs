@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Computer.Models.Post;
 
-namespace Computer.Models
+namespace Computer.Models.Product
 {
     public class ProductCategoryViewModel
     {
@@ -17,11 +18,13 @@ namespace Computer.Models
         public string Description { set; get; }
 
         public int? ParentID { set; get; }
+
         public int? DisplayOrder { set; get; }
 
         public string Image { set; get; }
 
         public bool? HomeFlag { set; get; }
+
         public int HomeOrder { get; set; }
 
         public virtual IEnumerable<PostViewModel> Posts { set; get; }

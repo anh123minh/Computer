@@ -1,4 +1,6 @@
-﻿namespace Computer.Models
+﻿using Computer.Models.Common;
+
+namespace Computer.Models.Post
 {
     public class PostTagViewModel
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Computer.Models
+namespace Computer.Models.Post
 {
     public class PostCategoryViewModel
     {

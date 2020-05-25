@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Computer.Models
+namespace Computer.Models.Product
 {
     public class OrderViewModel
     {
@@ -32,8 +32,11 @@ namespace Computer.Models
         public string PaymentMethod { set; get; }
 
         public DateTime? CreatedDate { set; get; }
+
         public string CreatedBy { set; get; }
+
         public string PaymentStatus { set; get; }
+
         public bool Status { set; get; }
 
         [MaxLength(128)]

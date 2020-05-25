@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Computer.Models.System;
 
 namespace Computer.Models.DataContracts
 {

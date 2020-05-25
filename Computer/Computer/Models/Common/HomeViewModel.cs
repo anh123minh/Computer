@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Computer.Models.Product;
 
-namespace Computer.Models
+namespace Computer.Models.Common
 {
     public class HomeViewModel
     {

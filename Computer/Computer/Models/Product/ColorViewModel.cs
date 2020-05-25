@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace Computer.Models
+﻿namespace Computer.Models.Product
 {
     public class ColorViewModel
     {
