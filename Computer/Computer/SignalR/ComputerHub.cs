@@ -16,7 +16,7 @@ namespace Computer.SignalR
             new ConnectionMapping<string>();
 
 
-        public static void PushToAllUsers(AnnouncementViewModel message, TeduShopHub hub)
+        public static void PushToAllUsers(AnnouncementViewModel message, ComputerHub hub)
         {
             IHubConnectionContext<dynamic> clients = GetClients(hub);
             clients.All.addAnnouncement(message);
@@ -26,7 +26,7 @@ namespace Computer.SignalR
         /// </summary>
         /// <param name="who"></param>
         /// <param name="message"></param>
-        public static void PushToUser(string who, AnnouncementViewModel message, TeduShopHub hub)
+        public static void PushToUser(string who, AnnouncementViewModel message, ComputerHub hub)
         {
             IHubConnectionContext<dynamic> clients = GetClients(hub);
             foreach (var connectionId in _connections.GetConnections(who))
@@ -40,7 +40,7 @@ namespace Computer.SignalR
         /// </summary>
         /// <param name="who"></param>
         /// <param name="message"></param>
-        public static void PushToUsers(string[] whos, AnnouncementViewModel message, TeduShopHub hub)
+        public static void PushToUsers(string[] whos, AnnouncementViewModel message, ComputerHub hub)
         {
             IHubConnectionContext<dynamic> clients = GetClients(hub);
             for (int i = 0; i < whos.Length; i++)
@@ -53,12 +53,12 @@ namespace Computer.SignalR
             }
 
         }
-        private static IHubConnectionContext<dynamic> GetClients(TeduShopHub teduShopHub)
+        private static IHubConnectionContext<dynamic> GetClients(ComputerHub computerHub)
         {
-            if (teduShopHub == null)
-                return GlobalHost.ConnectionManager.GetHubContext<TeduShopHub>().Clients;
+            if (computerHub == null)
+                return GlobalHost.ConnectionManager.GetHubContext<ComputerHub>().Clients;
             else
-                return teduShopHub.Clients;
+                return computerHub.Clients;
         }
 
         /// <summary>
