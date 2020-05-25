@@ -8,6 +8,7 @@ using Computer.Service;
 using Computer.Infrastructure.Core;
 using Computer.Infrastructure.Extensions;
 using Computer.Models;
+using Computer.Models.Post;
 
 namespace Computer.Controllers
 {
