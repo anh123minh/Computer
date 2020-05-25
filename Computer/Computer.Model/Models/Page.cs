@@ -1,19 +1,25 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Computer.Model.Abstract;
 
 namespace Computer.Model.Models
 {
-    [Table("ApplicationGroups")]
-    public class ApplicationGroup
+    [Table("Pages")]
+    public class Page : Auditable
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { set; get; }
 
-        [StringLength(250)]
+        [Required]
+        [MaxLength(256)]
         public string Name { set; get; }
 
-        [StringLength(250)]
-        public string Description { set; get; }
+        [Column(TypeName = "varchar")]
+        [MaxLength(256)]
+        [Required]
+        public string Alias { set; get; }
+
+        public string Content { set; get; }
     }
 }
