@@ -1,65 +1,85 @@
 ﻿using System;
 using Computer.Data;
+using Computer.Model.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
-using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
 using Computer.Providers;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.SignalR;
+using Microsoft.Owin.Cors;
+
+[assembly: OwinStartup(typeof(Computer.Startup))]
 
 namespace Computer
 {
     public partial class Startup
     {
-        public static OAuthAuthorizationServerOptions OAuthOptions { get; private set; }
-
-        public static string PublicClientId { get; private set; }
-
-        // For more information on configuring authentication, please visit https://go.microsoft.com/fwlink/?LinkId=301864
+        // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
-            // Configure the db context and user manager to use a single instance per request
+            // Configure the db context, user manager and signin manager to use a single instance per request
             app.CreatePerOwinContext(ComputerDbContext.Create);
-            app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
 
-            // Enable the application to use a cookie to store information for the signed in user
-            // and to use a cookie to temporarily store information about a user logging in with a third party login provider
-            app.UseCookieAuthentication(new CookieAuthenticationOptions());
+            app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
+            app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
+            app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
+            app.CreatePerOwinContext<ApplicationRoleManager>(ApplicationRoleManager.Create);
+            app.CreatePerOwinContext<UserManager<AppUser>>(CreateManager);
+
+            //Allow Cross origin for API
+            app.UseCors(CorsOptions.AllowAll);
+
+
+
+            app.UseOAuthAuthorizationServer(new OAuthAuthorizationServerOptions
+            {
+                TokenEndpointPath = new PathString("/api/oauth/token"),
+                Provider = new AuthorizationServerProvider(),
+                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
+                AllowInsecureHttp = true
+            });
+            app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
-            // Configure the application for OAuth based flow
-            PublicClientId = "self";
-            OAuthOptions = new OAuthAuthorizationServerOptions
+            // Branch the pipeline here for requests that start with "/signalr"
+            app.Map("/signalr", map =>
             {
-                TokenEndpointPath = new PathString("/Token"),
-                Provider = new ApplicationOAuthProvider(PublicClientId),
-                AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
-                // In production mode set AllowInsecureHttp = false
-                AllowInsecureHttp = true
-            };
+                // Setup the CORS middleware to run before SignalR.
+                // By default this will allow all origins. You can 
+                // configure the set of origins and/or http verbs by
+                // providing a cors options with a different policy.
+                map.UseCors(CorsOptions.AllowAll);
 
-            // Enable the application to use bearer tokens to authenticate users
-            app.UseOAuthBearerTokens(OAuthOptions);
+                map.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions()
+                {
+                    Provider = new QueryStringOAuthBearerProvider()
+                });
 
-            // Uncomment the following lines to enable logging in with third party login providers
-            //app.UseMicrosoftAccountAuthentication(
-            //    clientId: "",
-            //    clientSecret: "");
+                var hubConfiguration = new HubConfiguration
+                {
+                    // You can enable JSONP by uncommenting line below.
+                    // JSONP requests are insecure but some older browsers (and some
+                    // versions of IE) require JSONP to work cross domain
+                    EnableJSONP = true,
+                    EnableDetailedErrors = true
+                };
+                // Run the SignalR pipeline. We're not using MapSignalR
+                // since this branch already runs under the "/signalr"
+                // path.
+                map.RunSignalR(hubConfiguration);
+            });
 
-            //app.UseTwitterAuthentication(
-            //    consumerKey: "",
-            //    consumerSecret: "");
+        }
 
-            //app.UseFacebookAuthentication(
-            //    appId: "",
-            //    appSecret: "");
+        private static UserManager<AppUser> CreateManager(IdentityFactoryOptions<UserManager<AppUser>> options, IOwinContext context)
+        {
+            var userStore = new UserStore<AppUser>(context.Get<ComputerDbContext>());
+            var owinManager = new UserManager<AppUser>(userStore);
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            return owinManager;
         }
     }
 }
