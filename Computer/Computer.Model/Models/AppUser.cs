@@ -35,5 +35,7 @@ namespace Computer.Model.Models
         }
 
         public virtual IEnumerable<Order> Orders { set; get; }
+
+        public virtual IEnumerable<ComputerUsingHistory> ComputerUsingHistories { set; get; }
     }
 }

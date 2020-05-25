@@ -75,6 +75,14 @@ namespace Computer.Data.Migrations
                     new Function() {ID = "ACCESS",Name = "Báo cáo truy cập",ParentId = "REPORT",DisplayOrder = 2,Status = true,URL = "/main/report/visitor",IconCss = "fa-bar-chart-o"  },
                     new Function() {ID = "READER",Name = "Báo cáo độc giả",ParentId = "REPORT",DisplayOrder = 3,Status = true,URL = "/main/report/reader",IconCss = "fa-bar-chart-o"  },
 
+                    new Function() {ID = "COMPUTER_MANAGEMENT",Name = "Quản lý máy tính",ParentId = null,DisplayOrder = 6,Status = true,URL = "/",IconCss = "fa-laptop-house"  },
+                    new Function() {ID = "COMPUTER",Name = "Máy tính",ParentId = "COMPUTER_MANAGEMENT",DisplayOrder = 1,Status = true,URL = "/main/computer/computer",IconCss = "fa-desktop"  },
+                    new Function() {ID = "COMPUTER_TYPE",Name = "Loại máy tính",ParentId = "COMPUTER_MANAGEMENT",DisplayOrder = 2,Status = true,URL = "/main/computer/computer-type",IconCss = "fa-laptop-code"  },
+                    new Function() {ID = "PRODUCER_TYPE",Name = "Nhà sản xuất",ParentId = "COMPUTER_MANAGEMENT",DisplayOrder = 3,Status = true,URL = "/main/computer/producer-type",IconCss = "fa-laptop"  },
+                    new Function() {ID = "DEPARMENT_TYPE",Name = "Phòng ban",ParentId = "COMPUTER_MANAGEMENT",DisplayOrder = 4,Status = true,URL = "/main/computer/deparment-type",IconCss = "fa-network-wired"  },
+                    new Function() {ID = "COMPUTER_HISTORY",Name = "Lịch sử sử dụng",ParentId = "COMPUTER_MANAGEMENT",DisplayOrder = 5,Status = true,URL = "/main/computer/computer-history",IconCss = "fa-tv"  },
+                    new Function() {ID = "USING_REPORT",Name = "Báo cáo sử dụng",ParentId = "COMPUTER_MANAGEMENT",DisplayOrder = 6,Status = true,URL = "/main/computer/using-report",IconCss = "fa-database"  },
+
                 });
                 context.SaveChanges();
             }
@@ -128,7 +136,7 @@ namespace Computer.Data.Migrations
                 };
                 if (manager.Users.Count(x => x.UserName == "admin") == 0)
                 {
-                    manager.Create(user, "123654$");
+                    manager.Create(user, "123456$");
 
                     if (!roleManager.Roles.Any())
                     {
