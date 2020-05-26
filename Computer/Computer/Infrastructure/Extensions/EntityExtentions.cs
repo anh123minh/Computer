@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Computer.Common;
 using Computer.Model.Models;
 using Computer.Models.Common;
 using Computer.Models.Computer;
@@ -242,8 +243,9 @@ namespace Computer.Infrastructure.Extensions
             appUser.FullName = appUserViewModel.FullName;
             if (!string.IsNullOrEmpty(appUserViewModel.BirthDay))
             {
-                DateTime dateTime = DateTime.ParseExact(appUserViewModel.BirthDay, "dd/MM/yyyy", new CultureInfo("vi-VN"));
-                appUser.BirthDay = dateTime;
+                //DateTime dateTime = DateTime.ParseExact(appUserViewModel.BirthDay, "dd/MM/yyyy", new CultureInfo("vi-VN"));
+                //appUser.BirthDay = dateTime;
+                appUser.BirthDay = MethodHelper.StringToMonthDayYear(appUserViewModel.BirthDay);
             }
 
             appUser.Email = appUserViewModel.Email;
