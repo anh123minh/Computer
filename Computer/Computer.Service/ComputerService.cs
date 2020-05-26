@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Computer.Data.Infrastructure;
 using Computer.Data.Repositories;
 
@@ -19,12 +20,14 @@ namespace Computer.Service
         Model.Models.Computer GetById(int id);
 
         void Save();
+
+        List<Model.Models.Computer> GetAllPagingWithFilter(int page, int pageSize, out int totalRow, string filter);
     }
 
     public class ComputerService : IComputerService
     {
-        private IComputerRepository _computerRepository;
-        private IUnitOfWork _unitOfWork;
+        private readonly IComputerRepository _computerRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public ComputerService(IComputerRepository computerRepository, IUnitOfWork unitOfWork)
         {
@@ -60,6 +63,19 @@ namespace Computer.Service
         public void Save()
         {
             _unitOfWork.Commit();
+        }
+
+        public List<Model.Models.Computer> GetAllPagingWithFilter(int page, int pageSize, out int totalRow, string filter)
+        {
+            var query = _computerRepository.GetAll();
+            if (!string.IsNullOrEmpty(filter))
+            {
+                query = query.Where(x => x.ComputerCode.Contains(filter) || x.ComputerName.Contains(filter));
+            }
+
+            totalRow = query.Count();
+
+            return query.OrderByDescending(x => x.CreatedDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
         }
 
         public void Update(Model.Models.Computer computer)

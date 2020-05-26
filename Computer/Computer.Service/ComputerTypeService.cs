@@ -1,30 +1,34 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Computer.Data.Infrastructure;
 using Computer.Data.Repositories;
+using Computer.Model.Models;
 
 namespace Computer.Service
 {
     public interface IComputerTypeService
     {
-        Model.Models.ComputerType Add(Model.Models.ComputerType computer);
+        ComputerType Add(ComputerType computer);
 
-        void Update(Model.Models.ComputerType computer);
+        void Update(ComputerType computer);
 
-        Model.Models.ComputerType Delete(int id);
+        ComputerType Delete(int id);
 
-        IEnumerable<Model.Models.ComputerType> GetAll();
+        IEnumerable<ComputerType> GetAll();
 
-        IEnumerable<Model.Models.ComputerType> GetAllPaging(int page, int pageSize, out int totalRow);
+        IEnumerable<ComputerType> GetAllPaging(int page, int pageSize, out int totalRow);
 
-        Model.Models.ComputerType GetById(int id);
+        ComputerType GetById(int id);
 
         void Save();
+
+        List<ComputerType> GetAllPagingWithFilter(int page, int pageSize, out int totalRow, string filter);
     }
 
     public class ComputerTypeService : IComputerTypeService
     {
-        private IComputerTypeRepository _computerTypeRepository;
-        private IUnitOfWork _unitOfWork;
+        private readonly IComputerTypeRepository _computerTypeRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public ComputerTypeService(IComputerTypeRepository computerTypeRepository, IUnitOfWork unitOfWork)
         {
@@ -32,27 +36,27 @@ namespace Computer.Service
             this._unitOfWork = unitOfWork;
         }
 
-        public Model.Models.ComputerType Add(Model.Models.ComputerType computer)
+        public ComputerType Add(ComputerType computer)
         {
             return _computerTypeRepository.Add(computer);
         }
 
-        public Model.Models.ComputerType Delete(int id)
+        public ComputerType Delete(int id)
         {
             return _computerTypeRepository.Delete(id);
         }
 
-        public IEnumerable<Model.Models.ComputerType> GetAll()
+        public IEnumerable<ComputerType> GetAll()
         {
             return _computerTypeRepository.GetAll();
         }
 
-        public IEnumerable<Model.Models.ComputerType> GetAllPaging(int page, int pageSize, out int totalRow)
+        public IEnumerable<ComputerType> GetAllPaging(int page, int pageSize, out int totalRow)
         {
             return _computerTypeRepository.GetMultiPaging(x => x.Status, out totalRow, page, pageSize);
         }
 
-        public Model.Models.ComputerType GetById(int id)
+        public ComputerType GetById(int id)
         {
             return _computerTypeRepository.GetSingleById(id);
         }
@@ -62,7 +66,20 @@ namespace Computer.Service
             _unitOfWork.Commit();
         }
 
-        public void Update(Model.Models.ComputerType computer)
+        public List<ComputerType> GetAllPagingWithFilter(int page, int pageSize, out int totalRow, string filter = "")
+        {
+            var query = _computerTypeRepository.GetAll();
+            if (!string.IsNullOrEmpty(filter))
+            {
+                query = query.Where(x => x.ComputerTypeCode.Contains(filter) || x.ComputerTypeName.Contains(filter));
+            }
+            
+            totalRow = query.Count();
+
+            return query.OrderByDescending(x => x.CreatedDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        }
+
+        public void Update(ComputerType computer)
         {
             _computerTypeRepository.Update(computer);
         }

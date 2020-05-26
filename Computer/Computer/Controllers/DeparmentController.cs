@@ -1,25 +1,25 @@
-﻿using AutoMapper;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using AutoMapper;
 using Computer.Infrastructure.Core;
-using Computer.Service;
 using Computer.Infrastructure.Extensions;
+using Computer.Model.Models;
 using Computer.Models.Computer;
+using Computer.Service;
 
 namespace Computer.Controllers
 {
     [Authorize]
-    [RoutePrefix("api/computer")]    
-    public class ComputerController : ApiControllerBase
+    [RoutePrefix("api/deparmentType")]
+    public class DeparmentController : ApiControllerBase
     {
-        private readonly IComputerService _computerService;
+        private readonly IDeparmentTypeService _deparmentTypeService;
 
-        public ComputerController(IErrorService errorService, IComputerService computerService) :
-            base(errorService)
+        public DeparmentController(IErrorService errorService, IDeparmentTypeService deparmentTypeService) : base(errorService)
         {
-            _computerService = computerService;
+            _deparmentTypeService = deparmentTypeService;
         }
 
         [HttpGet]
@@ -30,10 +30,10 @@ namespace Computer.Controllers
             {
                 int totalRow;
 
-                var model = _computerService.GetAllPagingWithFilter(page, pageSize, out totalRow, filter);
-                var modelVm = Mapper.Map<List<Model.Models.Computer>, List<ComputerViewModel>>(model);
+                var model = _deparmentTypeService.GetAllPagingWithFilter(page, pageSize, out totalRow, filter);
+                var modelVm = Mapper.Map<List<DeparmentType>, List<DeparmentTypeViewModel>>(model);
 
-                var pagedSet = new PaginationSet<ComputerViewModel>()
+                var pagedSet = new PaginationSet<DeparmentTypeViewModel>()
                 {
                     PageIndex = page,
                     PageSize = pageSize,
@@ -48,22 +48,6 @@ namespace Computer.Controllers
         }
 
         [HttpGet]
-        [Route("getall")]
-        public HttpResponseMessage GetAll(HttpRequestMessage request)
-        {
-            return CreateHttpResponse(request, () =>
-            {
-                var listComputer = _computerService.GetAll();
-
-                var listComputerVm = Mapper.Map<List<ComputerViewModel>>(listComputer);
-
-                var response = request.CreateResponse(HttpStatusCode.OK, listComputerVm);
-
-                return response;
-            });
-        }
-
-        [HttpGet]
         [Route("detail/{id}")]
         public HttpResponseMessage GetDetailById(HttpRequestMessage request, int id)
         {
@@ -72,20 +56,20 @@ namespace Computer.Controllers
                 return request.CreateErrorResponse(HttpStatusCode.BadRequest, nameof(id) + " không có giá trị.");
             }
 
-            var computer = _computerService.GetById(id);
-            if (computer == null)
+            var deparmentType = _deparmentTypeService.GetById(id);
+            if (deparmentType == null)
             {
                 return request.CreateErrorResponse(HttpStatusCode.NoContent, "Không có dữ liệu");
             }
 
-            var orderVm = Mapper.Map<Model.Models.Computer, ComputerViewModel>(computer);
+            var orderVm = Mapper.Map<DeparmentType, DeparmentTypeViewModel>(deparmentType);
 
             return request.CreateResponse(HttpStatusCode.OK, orderVm);
         }
 
         [HttpPost]
         [Route("add")]
-        public HttpResponseMessage Post(HttpRequestMessage request, ComputerViewModel computerVm)
+        public HttpResponseMessage Post(HttpRequestMessage request, DeparmentTypeViewModel deparmentTypeVm)
         {
             return CreateHttpResponse(request, () =>
             {
@@ -96,13 +80,13 @@ namespace Computer.Controllers
                 }
                 else
                 {
-                    Model.Models.Computer newComputer = new Model.Models.Computer();
-                    newComputer.UpdateComputer(computerVm);
+                    var newDeparmentType = new DeparmentType();
+                    newDeparmentType.UpdateDeparmentType(deparmentTypeVm);
 
-                    var computer = _computerService.Add(newComputer);
-                    _computerService.Save();
+                    var deparmentType = _deparmentTypeService.Add(newDeparmentType);
+                    _deparmentTypeService.Save();
 
-                    response = request.CreateResponse(HttpStatusCode.Created, computer);
+                    response = request.CreateResponse(HttpStatusCode.Created, deparmentType);
                 }
                 return response;
             });
@@ -110,7 +94,7 @@ namespace Computer.Controllers
 
         [HttpPut]
         [Route("update")]
-        public HttpResponseMessage Put(HttpRequestMessage request, ComputerViewModel computerVm)
+        public HttpResponseMessage Put(HttpRequestMessage request, DeparmentTypeViewModel deparmentTypeVm)
         {
             return CreateHttpResponse(request, () =>
             {
@@ -121,10 +105,10 @@ namespace Computer.Controllers
                 }
                 else
                 {
-                    var computerDb = _computerService.GetById(computerVm.ComputerId);
-                    computerDb.UpdateComputer(computerVm);
-                    _computerService.Update(computerDb);
-                    _computerService.Save();
+                    var deparmentTypeDb = _deparmentTypeService.GetById(deparmentTypeVm.DeparmentTypeId);
+                    deparmentTypeDb.UpdateDeparmentType(deparmentTypeVm);
+                    _deparmentTypeService.Update(deparmentTypeDb);
+                    _deparmentTypeService.Save();
 
                     response = request.CreateResponse(HttpStatusCode.OK);
                 }
@@ -138,18 +122,19 @@ namespace Computer.Controllers
         {
             return CreateHttpResponse(request, () =>
             {
-                HttpResponseMessage response = null;
+                HttpResponseMessage response;
                 if (!ModelState.IsValid)
                 {
-                    request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                    response = request.CreateResponse(HttpStatusCode.BadRequest, ModelState);
                 }
                 else
                 {
-                    _computerService.Delete(id);
-                    _computerService.Save();
-
+                    _deparmentTypeService.Delete(id);
+                    _deparmentTypeService.Save();
+                    
                     response = request.CreateResponse(HttpStatusCode.OK);
                 }
+
                 return response;
             });
         }

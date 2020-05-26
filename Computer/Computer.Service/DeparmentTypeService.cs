@@ -1,30 +1,34 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Computer.Data.Infrastructure;
 using Computer.Data.Repositories;
+using Computer.Model.Models;
 
 namespace Computer.Service
 {
     public interface IDeparmentTypeService
     {
-        Model.Models.DeparmentType Add(Model.Models.DeparmentType deparmentType);
+        DeparmentType Add(DeparmentType deparmentType);
 
-        void Update(Model.Models.DeparmentType deparmentType);
+        void Update(DeparmentType deparmentType);
 
-        Model.Models.DeparmentType Delete(int id);
+        DeparmentType Delete(int id);
 
-        IEnumerable<Model.Models.DeparmentType> GetAll();
+        IEnumerable<DeparmentType> GetAll();
 
-        IEnumerable<Model.Models.DeparmentType> GetAllPaging(int page, int pageSize, out int totalRow);
+        IEnumerable<DeparmentType> GetAllPaging(int page, int pageSize, out int totalRow);
 
-        Model.Models.DeparmentType GetById(int id);
+        DeparmentType GetById(int id);
 
         void Save();
+
+        List<DeparmentType> GetAllPagingWithFilter(int page, int pageSize, out int totalRow, string filter);
     }
 
     public class DeparmentTypeService : IDeparmentTypeService
     {
-        private IDeparmentTypeRepository _deparmentTypeRepository;
-        private IUnitOfWork _unitOfWork;
+        private readonly IDeparmentTypeRepository _deparmentTypeRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public DeparmentTypeService(IDeparmentTypeRepository deparmentTypeRepository, IUnitOfWork unitOfWork)
         {
@@ -32,27 +36,27 @@ namespace Computer.Service
             this._unitOfWork = unitOfWork;
         }
 
-        public Model.Models.DeparmentType Add(Model.Models.DeparmentType deparmentType)
+        public DeparmentType Add(DeparmentType deparmentType)
         {
             return _deparmentTypeRepository.Add(deparmentType);
         }
 
-        public Model.Models.DeparmentType Delete(int id)
+        public DeparmentType Delete(int id)
         {
             return _deparmentTypeRepository.Delete(id);
         }
 
-        public IEnumerable<Model.Models.DeparmentType> GetAll()
+        public IEnumerable<DeparmentType> GetAll()
         {
             return _deparmentTypeRepository.GetAll();
         }
 
-        public IEnumerable<Model.Models.DeparmentType> GetAllPaging(int page, int pageSize, out int totalRow)
+        public IEnumerable<DeparmentType> GetAllPaging(int page, int pageSize, out int totalRow)
         {
             return _deparmentTypeRepository.GetMultiPaging(x => x.Status, out totalRow, page, pageSize);
         }
 
-        public Model.Models.DeparmentType GetById(int id)
+        public DeparmentType GetById(int id)
         {
             return _deparmentTypeRepository.GetSingleById(id);
         }
@@ -62,7 +66,20 @@ namespace Computer.Service
             _unitOfWork.Commit();
         }
 
-        public void Update(Model.Models.DeparmentType deparmentType)
+        public List<DeparmentType> GetAllPagingWithFilter(int page, int pageSize, out int totalRow, string filter)
+        {
+            var query = _deparmentTypeRepository.GetAll();
+            if (!string.IsNullOrEmpty(filter))
+            {
+                query = query.Where(x => x.DeparmentTypeCode.Contains(filter) || x.DeparmentTypeName.Contains(filter));
+            }
+
+            totalRow = query.Count();
+
+            return query.OrderByDescending(x => x.CreatedDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        }
+
+        public void Update(DeparmentType deparmentType)
         {
             _deparmentTypeRepository.Update(deparmentType);
         }

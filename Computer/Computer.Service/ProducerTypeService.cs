@@ -1,30 +1,34 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Computer.Data.Infrastructure;
 using Computer.Data.Repositories;
+using Computer.Model.Models;
 
 namespace Computer.Service
 {
     public interface IProducerTypeService
     {
-        Model.Models.ProducerType Add(Model.Models.ProducerType producer);
+        ProducerType Add(ProducerType producer);
 
-        void Update(Model.Models.ProducerType producer);
+        void Update(ProducerType producer);
 
-        Model.Models.ProducerType Delete(int id);
+        ProducerType Delete(int id);
 
-        IEnumerable<Model.Models.ProducerType> GetAll();
+        IEnumerable<ProducerType> GetAll();
 
-        IEnumerable<Model.Models.ProducerType> GetAllPaging(int page, int pageSize, out int totalRow);
+        IEnumerable<ProducerType> GetAllPaging(int page, int pageSize, out int totalRow);
 
-        Model.Models.ProducerType GetById(int id);
+        ProducerType GetById(int id);
 
         void Save();
+
+        List<ProducerType> GetAllPagingWithFilter(int page, int pageSize, out int totalRow, string filter);
     }
 
     public class ProducerTypeService : IProducerTypeService
     {
-        private IProducerTypeRepository _producerTypeRepository;
-        private IUnitOfWork _unitOfWork;
+        private readonly IProducerTypeRepository _producerTypeRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public ProducerTypeService(IProducerTypeRepository producerTypeRepository, IUnitOfWork unitOfWork)
         {
@@ -32,27 +36,27 @@ namespace Computer.Service
             this._unitOfWork = unitOfWork;
         }
 
-        public Model.Models.ProducerType Add(Model.Models.ProducerType producer)
+        public ProducerType Add(ProducerType producer)
         {
             return _producerTypeRepository.Add(producer);
         }
 
-        public Model.Models.ProducerType Delete(int id)
+        public ProducerType Delete(int id)
         {
             return _producerTypeRepository.Delete(id);
         }
 
-        public IEnumerable<Model.Models.ProducerType> GetAll()
+        public IEnumerable<ProducerType> GetAll()
         {
             return _producerTypeRepository.GetAll();
         }
 
-        public IEnumerable<Model.Models.ProducerType> GetAllPaging(int page, int pageSize, out int totalRow)
+        public IEnumerable<ProducerType> GetAllPaging(int page, int pageSize, out int totalRow)
         {
             return _producerTypeRepository.GetMultiPaging(x => x.Status, out totalRow, page, pageSize);
         }
 
-        public Model.Models.ProducerType GetById(int id)
+        public ProducerType GetById(int id)
         {
             return _producerTypeRepository.GetSingleById(id);
         }
@@ -62,7 +66,20 @@ namespace Computer.Service
             _unitOfWork.Commit();
         }
 
-        public void Update(Model.Models.ProducerType producer)
+        public List<ProducerType> GetAllPagingWithFilter(int page, int pageSize, out int totalRow, string filter = "")
+        {
+            var query = _producerTypeRepository.GetAll();
+            if (!string.IsNullOrEmpty(filter))
+            {
+                query = query.Where(x => x.ProducerTypeCode.Contains(filter) || x.ProducerTypeName.Contains(filter));
+            }
+
+            totalRow = query.Count();
+
+            return query.OrderByDescending(x => x.CreatedDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        }
+
+        public void Update(ProducerType producer)
         {
             _producerTypeRepository.Update(producer);
         }
