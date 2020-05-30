@@ -74,6 +74,7 @@
     <Compile Include="Enums\ActionEnum.cs" />
     <Compile Include="Enums\RoleEnum.cs" />
     <Compile Include="Exceptions\NameDuplicatedException.cs" />
+    <Compile Include="Extentions\ExpressionExtensions.cs" />
     <Compile Include="MailHelper.cs" />
     <Compile Include="MemoryCacheHelper.cs" />
     <Compile Include="MethodHelper.cs" />
