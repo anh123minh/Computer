@@ -38,7 +38,7 @@ namespace Computer
             {
                 TokenEndpointPath = new PathString("/api/oauth/token"),
                 Provider = new AuthorizationServerProvider(),
-                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
+                AccessTokenExpireTimeSpan = TimeSpan.FromHours(14),
                 AllowInsecureHttp = true
             });
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
