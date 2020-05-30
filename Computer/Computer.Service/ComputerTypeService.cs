@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Computer.Data.Infrastructure;
 using Computer.Data.Repositories;
@@ -8,21 +9,21 @@ namespace Computer.Service
 {
     public interface IComputerTypeService
     {
-        ComputerType Add(ComputerType computer);
+        ComputerType Add(ComputerType computerType);
 
-        void Update(ComputerType computer);
+        void Update(ComputerType computerType);
 
         ComputerType Delete(int id);
 
         IEnumerable<ComputerType> GetAll();
 
-        IEnumerable<ComputerType> GetAllPaging(int page, int pageSize, out int totalRow);
+        IEnumerable<ComputerType> GetAllPaging(int pageIndex, int pageSize, out int totalRow);
 
         ComputerType GetById(int id);
 
         void Save();
 
-        List<ComputerType> GetAllPagingWithFilter(int page, int pageSize, out int totalRow, string filter);
+        List<ComputerType> GetAllPagingWithFilter(int pageIndex, int pageSize, out int totalRow, string filter);
     }
 
     public class ComputerTypeService : IComputerTypeService
@@ -36,9 +37,13 @@ namespace Computer.Service
             this._unitOfWork = unitOfWork;
         }
 
-        public ComputerType Add(ComputerType computer)
+        public ComputerType Add(ComputerType computerType)
         {
-            return _computerTypeRepository.Add(computer);
+            computerType.CreatedDate = DateTime.Now;
+            //computerType.CreatedBy = ad //Todo: Add CreatedBy
+            computerType.UpdatedDate = DateTime.Now;
+            //computerType.UpdatedBy = ad //Todo: Add CreatedBy
+            return _computerTypeRepository.Add(computerType);
         }
 
         public ComputerType Delete(int id)
@@ -51,9 +56,9 @@ namespace Computer.Service
             return _computerTypeRepository.GetAll();
         }
 
-        public IEnumerable<ComputerType> GetAllPaging(int page, int pageSize, out int totalRow)
+        public IEnumerable<ComputerType> GetAllPaging(int pageIndex, int pageSize, out int totalRow)
         {
-            return _computerTypeRepository.GetMultiPaging(x => x.Status, out totalRow, page, pageSize);
+            return _computerTypeRepository.GetMultiPaging(x => x.Status, out totalRow, pageIndex, pageSize);
         }
 
         public ComputerType GetById(int id)
@@ -66,7 +71,7 @@ namespace Computer.Service
             _unitOfWork.Commit();
         }
 
-        public List<ComputerType> GetAllPagingWithFilter(int page, int pageSize, out int totalRow, string filter = "")
+        public List<ComputerType> GetAllPagingWithFilter(int pageIndex, int pageSize, out int totalRow, string filter = "")
         {
             var query = _computerTypeRepository.GetAll();
             if (!string.IsNullOrEmpty(filter))
@@ -76,12 +81,14 @@ namespace Computer.Service
             
             totalRow = query.Count();
 
-            return query.OrderByDescending(x => x.CreatedDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            return query.OrderByDescending(x => x.UpdatedDate).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
         }
 
-        public void Update(ComputerType computer)
+        public void Update(ComputerType computerType)
         {
-            _computerTypeRepository.Update(computer);
+            computerType.UpdatedDate = DateTime.Now;
+            //computerType.UpdatedBy = ad //Todo: Add CreatedBy
+            _computerTypeRepository.Update(computerType);
         }
     }
 }

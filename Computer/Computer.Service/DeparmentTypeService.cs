@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Computer.Data.Infrastructure;
 using Computer.Data.Repositories;
@@ -16,13 +17,13 @@ namespace Computer.Service
 
         IEnumerable<DeparmentType> GetAll();
 
-        IEnumerable<DeparmentType> GetAllPaging(int page, int pageSize, out int totalRow);
+        IEnumerable<DeparmentType> GetAllPaging(int pageIndex, int pageSize, out int totalRow);
 
         DeparmentType GetById(int id);
 
         void Save();
 
-        List<DeparmentType> GetAllPagingWithFilter(int page, int pageSize, out int totalRow, string filter);
+        List<DeparmentType> GetAllPagingWithFilter(int pageIndex, int pageSize, out int totalRow, string filter);
     }
 
     public class DeparmentTypeService : IDeparmentTypeService
@@ -38,6 +39,10 @@ namespace Computer.Service
 
         public DeparmentType Add(DeparmentType deparmentType)
         {
+            deparmentType.CreatedDate = DateTime.Now;
+            //deparmentType.CreatedBy = ad //Todo: Add CreatedBy
+            deparmentType.UpdatedDate = DateTime.Now;
+            //deparmentType.UpdatedBy = ad //Todo: Add CreatedBy
             return _deparmentTypeRepository.Add(deparmentType);
         }
 
@@ -51,9 +56,9 @@ namespace Computer.Service
             return _deparmentTypeRepository.GetAll();
         }
 
-        public IEnumerable<DeparmentType> GetAllPaging(int page, int pageSize, out int totalRow)
+        public IEnumerable<DeparmentType> GetAllPaging(int pageIndex, int pageSize, out int totalRow)
         {
-            return _deparmentTypeRepository.GetMultiPaging(x => x.Status, out totalRow, page, pageSize);
+            return _deparmentTypeRepository.GetMultiPaging(x => x.Status, out totalRow, pageIndex, pageSize);
         }
 
         public DeparmentType GetById(int id)
@@ -66,7 +71,7 @@ namespace Computer.Service
             _unitOfWork.Commit();
         }
 
-        public List<DeparmentType> GetAllPagingWithFilter(int page, int pageSize, out int totalRow, string filter)
+        public List<DeparmentType> GetAllPagingWithFilter(int pageIndex, int pageSize, out int totalRow, string filter)
         {
             var query = _deparmentTypeRepository.GetAll();
             if (!string.IsNullOrEmpty(filter))
@@ -76,11 +81,13 @@ namespace Computer.Service
 
             totalRow = query.Count();
 
-            return query.OrderByDescending(x => x.CreatedDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            return query.OrderByDescending(x => x.UpdatedDate).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
         }
 
         public void Update(DeparmentType deparmentType)
         {
+            deparmentType.UpdatedDate = DateTime.Now;
+            //deparmentType.UpdatedBy = ad //Todo: Add CreatedBy
             _deparmentTypeRepository.Update(deparmentType);
         }
     }

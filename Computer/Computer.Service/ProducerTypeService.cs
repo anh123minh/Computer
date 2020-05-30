@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Computer.Data.Infrastructure;
 using Computer.Data.Repositories;
@@ -8,21 +9,21 @@ namespace Computer.Service
 {
     public interface IProducerTypeService
     {
-        ProducerType Add(ProducerType producer);
+        ProducerType Add(ProducerType producerType);
 
-        void Update(ProducerType producer);
+        void Update(ProducerType producerType);
 
         ProducerType Delete(int id);
 
         IEnumerable<ProducerType> GetAll();
 
-        IEnumerable<ProducerType> GetAllPaging(int page, int pageSize, out int totalRow);
+        IEnumerable<ProducerType> GetAllPaging(int pageIndex, int pageSize, out int totalRow);
 
         ProducerType GetById(int id);
 
         void Save();
 
-        List<ProducerType> GetAllPagingWithFilter(int page, int pageSize, out int totalRow, string filter);
+        List<ProducerType> GetAllPagingWithFilter(int pageIndex, int pageSize, out int totalRow, string filter);
     }
 
     public class ProducerTypeService : IProducerTypeService
@@ -36,9 +37,13 @@ namespace Computer.Service
             this._unitOfWork = unitOfWork;
         }
 
-        public ProducerType Add(ProducerType producer)
+        public ProducerType Add(ProducerType producerType)
         {
-            return _producerTypeRepository.Add(producer);
+            producerType.CreatedDate = DateTime.Now;
+            //producerType.CreatedBy = ad //Todo: Add CreatedBy
+            producerType.UpdatedDate = DateTime.Now;
+            //producerType.UpdatedBy = ad //Todo: Add CreatedBy
+            return _producerTypeRepository.Add(producerType);
         }
 
         public ProducerType Delete(int id)
@@ -51,9 +56,9 @@ namespace Computer.Service
             return _producerTypeRepository.GetAll();
         }
 
-        public IEnumerable<ProducerType> GetAllPaging(int page, int pageSize, out int totalRow)
+        public IEnumerable<ProducerType> GetAllPaging(int pageIndex, int pageSize, out int totalRow)
         {
-            return _producerTypeRepository.GetMultiPaging(x => x.Status, out totalRow, page, pageSize);
+            return _producerTypeRepository.GetMultiPaging(x => x.Status, out totalRow, pageIndex, pageSize);
         }
 
         public ProducerType GetById(int id)
@@ -66,7 +71,7 @@ namespace Computer.Service
             _unitOfWork.Commit();
         }
 
-        public List<ProducerType> GetAllPagingWithFilter(int page, int pageSize, out int totalRow, string filter = "")
+        public List<ProducerType> GetAllPagingWithFilter(int pageIndex, int pageSize, out int totalRow, string filter = "")
         {
             var query = _producerTypeRepository.GetAll();
             if (!string.IsNullOrEmpty(filter))
@@ -76,12 +81,14 @@ namespace Computer.Service
 
             totalRow = query.Count();
 
-            return query.OrderByDescending(x => x.CreatedDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            return query.OrderByDescending(x => x.UpdatedDate).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
         }
 
-        public void Update(ProducerType producer)
+        public void Update(ProducerType producerType)
         {
-            _producerTypeRepository.Update(producer);
+            producerType.UpdatedDate = DateTime.Now;
+            //producerType.UpdatedBy = ad //Todo: Add CreatedBy
+            _producerTypeRepository.Update(producerType);
         }
     }
 }
