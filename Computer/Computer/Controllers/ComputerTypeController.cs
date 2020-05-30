@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -24,18 +26,18 @@ namespace Computer.Controllers
 
         [HttpGet]
         [Route("getlistpaging")]
-        public HttpResponseMessage GetListPaging(HttpRequestMessage request, int page, int pageSize, string filter = null)
+        public HttpResponseMessage GetListPaging(HttpRequestMessage request, int pageIndex, int pageSize, string filter = null)
         {
             return CreateHttpResponse(request, () =>
             {
                 int totalRow;
 
-                var model = _computerTypeService.GetAllPagingWithFilter(page, pageSize, out totalRow, filter);
+                var model = _computerTypeService.GetAllPagingWithFilter(pageIndex, pageSize, out totalRow, filter);
                 var modelVm = Mapper.Map<List<ComputerType>, List<ComputerTypeViewModel>>(model);
 
                 var pagedSet = new PaginationSet<ComputerTypeViewModel>()
                 {
-                    PageIndex = page,
+                    PageIndex = pageIndex,
                     PageSize = pageSize,
                     TotalRows = totalRow,
                     Items = modelVm,
@@ -46,7 +48,23 @@ namespace Computer.Controllers
                 return response;
             });
         }
-        
+
+        [HttpGet]
+        [Route("selectlist")]
+        public HttpResponseMessage GetComputerTypeSelecList(HttpRequestMessage request)
+        {
+            return CreateHttpResponse(request, () =>
+            {
+                var listComputerType = _computerTypeService.GetAll();
+
+                var listComputerTypeVm = Mapper.Map<List<ComputerTypeSelectListViewModel>>(listComputerType);
+
+                var response = request.CreateResponse(HttpStatusCode.OK, listComputerTypeVm);
+
+                return response;
+            });
+        }
+
         [HttpGet]
         [Route("detail/{id}")]
         public HttpResponseMessage GetDetailById(HttpRequestMessage request, int id)
@@ -62,9 +80,9 @@ namespace Computer.Controllers
                 return request.CreateErrorResponse(HttpStatusCode.NoContent, "Không có dữ liệu");
             }
 
-            var orderVm = Mapper.Map<ComputerType, ComputerTypeViewModel>(computerType);
+            var computerTypeViewModel = Mapper.Map<ComputerType, ComputerTypeViewModel>(computerType);
 
-            return request.CreateResponse(HttpStatusCode.OK, orderVm);
+            return request.CreateResponse(HttpStatusCode.OK, computerTypeViewModel);
         }
 
         [HttpPost]
@@ -76,7 +94,7 @@ namespace Computer.Controllers
                 HttpResponseMessage response = null;
                 if (!ModelState.IsValid)
                 {
-                    request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                    response = request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState.Values.FirstOrDefault()?.Errors.FirstOrDefault()?.ErrorMessage);
                 }
                 else
                 {
@@ -101,7 +119,7 @@ namespace Computer.Controllers
                 HttpResponseMessage response = null;
                 if (!ModelState.IsValid)
                 {
-                    request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                    response = request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState.Values.FirstOrDefault()?.Errors.FirstOrDefault()?.ErrorMessage);
                 }
                 else
                 {
@@ -125,7 +143,7 @@ namespace Computer.Controllers
                 HttpResponseMessage response;
                 if (!ModelState.IsValid)
                 {
-                    response = request.CreateResponse(HttpStatusCode.BadRequest, ModelState);
+                    response = request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState.Values.FirstOrDefault()?.Errors.FirstOrDefault()?.ErrorMessage);
                 }
                 else
                 {

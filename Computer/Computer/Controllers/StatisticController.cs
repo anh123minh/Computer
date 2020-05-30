@@ -9,7 +9,7 @@ namespace Computer.Controllers
     [RoutePrefix("api/statistic")]
     public class StatisticController : ApiControllerBase
     {
-        private IStatisticService _statisticService;
+        private readonly IStatisticService _statisticService;
 
         public StatisticController(IErrorService errorService, IStatisticService statisticService) : base(errorService)
         {
@@ -23,6 +23,42 @@ namespace Computer.Controllers
             return CreateHttpResponse(request, () =>
             {
                 var model = _statisticService.GetRevenueStatistic(fromDate, toDate);
+                HttpResponseMessage response = request.CreateResponse(HttpStatusCode.OK, model);
+                return response;
+            });
+        }
+
+        [Route("getComputerStatisticByComputerType")]
+        [HttpGet]
+        public HttpResponseMessage GetComputerStatisticByComputerType(HttpRequestMessage request)
+        {
+            return CreateHttpResponse(request, () =>
+            {
+                var model = _statisticService.GetComputerStatisticByComputerType();
+                HttpResponseMessage response = request.CreateResponse(HttpStatusCode.OK, model);
+                return response;
+            });
+        }
+
+        [Route("getComputerStatisticByProducerType")]
+        [HttpGet]
+        public HttpResponseMessage GetComputerStatisticByProducerType(HttpRequestMessage request)
+        {
+            return CreateHttpResponse(request, () =>
+            {
+                var model = _statisticService.GetComputerStatisticByProducerType();
+                HttpResponseMessage response = request.CreateResponse(HttpStatusCode.OK, model);
+                return response;
+            });
+        }
+
+        [Route("getComputerStatisticByUsingUnit")]
+        [HttpGet]
+        public HttpResponseMessage GetComputerStatisticByUsingUnit(HttpRequestMessage request)
+        {
+            return CreateHttpResponse(request, () =>
+            {
+                var model = _statisticService.GetComputerStatisticByUsingUnit();
                 HttpResponseMessage response = request.CreateResponse(HttpStatusCode.OK, model);
                 return response;
             });

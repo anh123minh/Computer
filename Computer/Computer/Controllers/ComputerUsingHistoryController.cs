@@ -13,28 +13,28 @@ using Computer.Service;
 namespace Computer.Controllers
 {
     [Authorize]
-    [RoutePrefix("api/producerType")]
-    public class ProducerController : ApiControllerBase
+    [RoutePrefix("api/computerUsingHistory")]
+    public class ComputerUsingHistoryController : ApiControllerBase
     {
-        private readonly IProducerTypeService _producerTypeService;
+        private readonly IComputerUsingHistoryService _computerUsingHistoryService;
 
-        public ProducerController(IErrorService errorService, IProducerTypeService producerTypeService) : base(errorService)
+        public ComputerUsingHistoryController(IErrorService errorService, IComputerUsingHistoryService computerUsingHistory) : base(errorService)
         {
-            _producerTypeService = producerTypeService;
+            _computerUsingHistoryService = computerUsingHistory;
         }
 
         [HttpGet]
         [Route("getlistpaging")]
-        public HttpResponseMessage GetListPaging(HttpRequestMessage request, int pageIndex, int pageSize, string filter = null)
+        public HttpResponseMessage GetListPaging(HttpRequestMessage request, int pageIndex, int pageSize, int? deparmentTypeId, string filter = null)
         {
             return CreateHttpResponse(request, () =>
             {
                 int totalRow;
 
-                var model = _producerTypeService.GetAllPagingWithFilter(pageIndex, pageSize, out totalRow, filter);
-                var modelVm = Mapper.Map<List<ProducerType>, List<ProducerTypeViewModel>>(model);
+                var model = _computerUsingHistoryService.GetAllPagingWithFilterDeparmentTypeId(pageIndex, pageSize, out totalRow, deparmentTypeId, filter);
+                var modelVm = Mapper.Map<List<ComputerUsingHistory>, List<ComputerUsingHistoryDetailViewModel>>(model);
 
-                var pagedSet = new PaginationSet<ProducerTypeViewModel>()
+                var pagedSet = new PaginationSet<ComputerUsingHistoryDetailViewModel>()
                 {
                     PageIndex = pageIndex,
                     PageSize = pageSize,
@@ -49,22 +49,6 @@ namespace Computer.Controllers
         }
 
         [HttpGet]
-        [Route("selectlist")]
-        public HttpResponseMessage GetProducerTypeSelecList(HttpRequestMessage request)
-        {
-            return CreateHttpResponse(request, () =>
-            {
-                var listProducerType = _producerTypeService.GetAll();
-
-                var listProducerTypeVm = Mapper.Map<List<ProducerTypeSelectListViewModel>>(listProducerType);
-
-                var response = request.CreateResponse(HttpStatusCode.OK, listProducerTypeVm);
-
-                return response;
-            });
-        }
-
-        [HttpGet]
         [Route("detail/{id}")]
         public HttpResponseMessage GetDetailById(HttpRequestMessage request, int id)
         {
@@ -73,20 +57,20 @@ namespace Computer.Controllers
                 return request.CreateErrorResponse(HttpStatusCode.BadRequest, nameof(id) + " không có giá trị.");
             }
 
-            var producerType = _producerTypeService.GetById(id);
-            if (producerType == null)
+            var computerUsingHistory = _computerUsingHistoryService.GetById(id);
+            if (computerUsingHistory == null)
             {
                 return request.CreateErrorResponse(HttpStatusCode.NoContent, "Không có dữ liệu");
             }
 
-            var producerTypeViewModel = Mapper.Map<ProducerType, ProducerTypeViewModel>(producerType);
+            var computerUsingHistoryDetailViewModel = Mapper.Map<ComputerUsingHistory, ComputerUsingHistoryDetailViewModel>(computerUsingHistory);
 
-            return request.CreateResponse(HttpStatusCode.OK, producerTypeViewModel);
+            return request.CreateResponse(HttpStatusCode.OK, computerUsingHistoryDetailViewModel);
         }
 
         [HttpPost]
         [Route("add")]
-        public HttpResponseMessage Post(HttpRequestMessage request, ProducerTypeViewModel producerTypeVm)
+        public HttpResponseMessage Post(HttpRequestMessage request, ComputerUsingHistoryViewModel computerTypeVm)
         {
             return CreateHttpResponse(request, () =>
             {
@@ -97,13 +81,13 @@ namespace Computer.Controllers
                 }
                 else
                 {
-                    var newProducerType = new ProducerType();
-                    newProducerType.UpdateProducerType(producerTypeVm);
+                    var newComputerUsingHistory = new ComputerUsingHistory();
+                    newComputerUsingHistory.UpdateComputerUsingHistory(computerTypeVm);
 
-                    var producerType = _producerTypeService.Add(newProducerType);
-                    _producerTypeService.Save();
+                    var computerUsingHistory = _computerUsingHistoryService.Add(newComputerUsingHistory);
+                    _computerUsingHistoryService.Save();
 
-                    response = request.CreateResponse(HttpStatusCode.Created, producerType);
+                    response = request.CreateResponse(HttpStatusCode.Created, computerUsingHistory);
                 }
                 return response;
             });
@@ -111,7 +95,7 @@ namespace Computer.Controllers
 
         [HttpPut]
         [Route("update")]
-        public HttpResponseMessage Put(HttpRequestMessage request, ProducerTypeViewModel producerTypeVm)
+        public HttpResponseMessage Put(HttpRequestMessage request, ComputerUsingHistoryViewModel computerTypeVm)
         {
             return CreateHttpResponse(request, () =>
             {
@@ -122,10 +106,10 @@ namespace Computer.Controllers
                 }
                 else
                 {
-                    var producerTypeDb = _producerTypeService.GetById(producerTypeVm.ProducerTypeId);
-                    producerTypeDb.UpdateProducerType(producerTypeVm);
-                    _producerTypeService.Update(producerTypeDb);
-                    _producerTypeService.Save();
+                    var computerTypeDb = _computerUsingHistoryService.GetById(computerTypeVm.ComputerUsingHistoryId);
+                    computerTypeDb.UpdateComputerUsingHistory(computerTypeVm);
+                    _computerUsingHistoryService.Update(computerTypeDb);
+                    _computerUsingHistoryService.Save();
 
                     response = request.CreateResponse(HttpStatusCode.OK);
                 }
@@ -146,9 +130,9 @@ namespace Computer.Controllers
                 }
                 else
                 {
-                    _producerTypeService.Delete(id);
-                    _producerTypeService.Save();
-                    
+                    _computerUsingHistoryService.Delete(id);
+                    _computerUsingHistoryService.Save();
+
                     response = request.CreateResponse(HttpStatusCode.OK);
                 }
 

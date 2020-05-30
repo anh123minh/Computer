@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using System.Web.Http;
 using Computer.Infrastructure.Core;
 using Computer.Model.Models;
@@ -21,19 +18,22 @@ namespace Computer.Controllers
         private readonly IComputerTypeService _computerTypeService;
         private readonly IDeparmentTypeService _deparmentTypeService;
         private readonly IProducerTypeService _producerTypeService;
+        private readonly IComputerUsingHistoryService _computerUsingHistoryService;
 
         public FakeDataController(
             IErrorService errorService, 
             IComputerService computerService, 
             IComputerTypeService computerTypeService,
             IDeparmentTypeService deparmentTypeService, 
-            IProducerTypeService producerTypeService) :
+            IProducerTypeService producerTypeService,
+            IComputerUsingHistoryService computerUsingHistoryService) :
             base(errorService)
         {
             this._computerService = computerService;
             _computerTypeService = computerTypeService;
             _deparmentTypeService = deparmentTypeService;
             _producerTypeService = producerTypeService;
+            _computerUsingHistoryService = computerUsingHistoryService;
         }
 
         [HttpGet]
@@ -46,7 +46,9 @@ namespace Computer.Controllers
 
             MassCreateProducerTypes();
 
-            //MassCreateComputers();
+            MassCreateComputers();
+
+            MassCreateComputerUsingHistories();
         }
 
         [HttpGet]
@@ -145,6 +147,7 @@ namespace Computer.Controllers
                     ComputerTypeId = i,
                     DeparmentTypeId = i,
                     ProducerTypeId = i,
+                    IsBusyNow = false,
                     Status = true
                 };
                 fakeComputers.Add(computer);
@@ -157,6 +160,39 @@ namespace Computer.Controllers
 
                 _computerService.Add(newComputer);
                 _computerService.Save();
+            }
+        }
+
+        [HttpGet]
+        [Route("MassCreateComputerUsingHistories")]
+        public void MassCreateComputerUsingHistories()
+        {
+            var random = new Random();
+
+            var listAppUser = AppUserManager.Users;
+            var firstUser = listAppUser.First();
+
+            var fakeComputerUsingHistories = new List<ComputerUsingHistoryViewModel>();
+            for (int i = 0; i < 10; i++)
+            {
+                var computerUsingHistory = new ComputerUsingHistoryViewModel()
+                {
+                    ComputerId = random.Next(1,5),
+                    UserId = firstUser.Id,
+                    Status = true,
+                    StartTime = DateTime.Now,
+                    EndTime = DateTime.Now.AddHours(random.Next(2, 4))
+                };
+                fakeComputerUsingHistories.Add(computerUsingHistory);
+            }
+
+            foreach (var computerUsingHistoryViewModel in fakeComputerUsingHistories)
+            {
+                var newComputerUsingHistory = new ComputerUsingHistory();
+                newComputerUsingHistory.UpdateComputerUsingHistory(computerUsingHistoryViewModel);
+
+                _computerUsingHistoryService.Add(newComputerUsingHistory);
+                _computerUsingHistoryService.Save();
             }
         }
     }

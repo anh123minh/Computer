@@ -326,8 +326,9 @@
     <Compile Include="Controllers\AnnouncementController.cs" />
     <Compile Include="Controllers\AppRoleController.cs" />
     <Compile Include="Controllers\AppUserController.cs" />
-    <Compile Include="Controllers\ComputersController.cs" />
+    <Compile Include="Controllers\ComputerController.cs" />
     <Compile Include="Controllers\ComputerTypeController.cs" />
+    <Compile Include="Controllers\ComputerUsingHistoryController.cs" />
     <Compile Include="Controllers\DeparmentController.cs" />
     <Compile Include="Controllers\FakeDataController.cs" />
     <Compile Include="Controllers\FunctionController.cs" />

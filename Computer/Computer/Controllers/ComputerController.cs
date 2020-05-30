@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -24,18 +25,19 @@ namespace Computer.Controllers
 
         [HttpGet]
         [Route("getlistpaging")]
-        public HttpResponseMessage GetListPaging(HttpRequestMessage request, int page, int pageSize, string filter = null)
+        public HttpResponseMessage GetListPaging(HttpRequestMessage request, int pageIndex, int pageSize,
+            int? computerTypeId, int? deparmentTypeId, int? producerTypeId, string filter = "")
         {
             return CreateHttpResponse(request, () =>
             {
                 int totalRow;
 
-                var model = _computerService.GetAllPagingWithFilter(page, pageSize, out totalRow, filter);
-                var modelVm = Mapper.Map<List<Model.Models.Computer>, List<ComputerViewModel>>(model);
+                var model = _computerService.GetAllPagingWithMultiFilters(pageIndex, pageSize, out totalRow, computerTypeId, deparmentTypeId, producerTypeId, filter);
+                var modelVm = Mapper.Map<List<Model.Models.Computer>, List<ComputerDetailViewModel>>(model);
 
-                var pagedSet = new PaginationSet<ComputerViewModel>()
+                var pagedSet = new PaginationSet<ComputerDetailViewModel>()
                 {
-                    PageIndex = page,
+                    PageIndex = pageIndex,
                     PageSize = pageSize,
                     TotalRows = totalRow,
                     Items = modelVm,
@@ -78,9 +80,9 @@ namespace Computer.Controllers
                 return request.CreateErrorResponse(HttpStatusCode.NoContent, "Không có dữ liệu");
             }
 
-            var orderVm = Mapper.Map<Model.Models.Computer, ComputerViewModel>(computer);
+            var computerViewModel = Mapper.Map<Model.Models.Computer, ComputerViewModel>(computer);
 
-            return request.CreateResponse(HttpStatusCode.OK, orderVm);
+            return request.CreateResponse(HttpStatusCode.OK, computerViewModel);
         }
 
         [HttpPost]
@@ -92,11 +94,11 @@ namespace Computer.Controllers
                 HttpResponseMessage response = null;
                 if (!ModelState.IsValid)
                 {
-                    request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                    response = request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState.Values.FirstOrDefault()?.Errors.FirstOrDefault()?.ErrorMessage);
                 }
                 else
                 {
-                    Model.Models.Computer newComputer = new Model.Models.Computer();
+                    var newComputer = new Model.Models.Computer();
                     newComputer.UpdateComputer(computerVm);
 
                     var computer = _computerService.Add(newComputer);
@@ -117,7 +119,7 @@ namespace Computer.Controllers
                 HttpResponseMessage response = null;
                 if (!ModelState.IsValid)
                 {
-                    request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                    response = request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState.Values.FirstOrDefault()?.Errors.FirstOrDefault()?.ErrorMessage);
                 }
                 else
                 {
@@ -141,7 +143,7 @@ namespace Computer.Controllers
                 HttpResponseMessage response = null;
                 if (!ModelState.IsValid)
                 {
-                    request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                    response = request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState.Values.FirstOrDefault()?.Errors.FirstOrDefault()?.ErrorMessage);
                 }
                 else
                 {

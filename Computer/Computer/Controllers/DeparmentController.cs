@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -24,24 +25,40 @@ namespace Computer.Controllers
 
         [HttpGet]
         [Route("getlistpaging")]
-        public HttpResponseMessage GetListPaging(HttpRequestMessage request, int page, int pageSize, string filter = null)
+        public HttpResponseMessage GetListPaging(HttpRequestMessage request, int pageIndex, int pageSize, string filter = null)
         {
             return CreateHttpResponse(request, () =>
             {
                 int totalRow;
 
-                var model = _deparmentTypeService.GetAllPagingWithFilter(page, pageSize, out totalRow, filter);
+                var model = _deparmentTypeService.GetAllPagingWithFilter(pageIndex, pageSize, out totalRow, filter);
                 var modelVm = Mapper.Map<List<DeparmentType>, List<DeparmentTypeViewModel>>(model);
 
                 var pagedSet = new PaginationSet<DeparmentTypeViewModel>()
                 {
-                    PageIndex = page,
+                    PageIndex = pageIndex,
                     PageSize = pageSize,
                     TotalRows = totalRow,
                     Items = modelVm,
                 };
 
                 var response = request.CreateResponse(HttpStatusCode.OK, pagedSet);
+
+                return response;
+            });
+        }
+
+        [HttpGet]
+        [Route("selectlist")]
+        public HttpResponseMessage GetDeparmentTypeSelecList(HttpRequestMessage request)
+        {
+            return CreateHttpResponse(request, () =>
+            {
+                var listDeparmentType = _deparmentTypeService.GetAll();
+
+                var listDeparmentTypeVm = Mapper.Map<List<DeparmentTypeSelectListViewModel>>(listDeparmentType);
+
+                var response = request.CreateResponse(HttpStatusCode.OK, listDeparmentTypeVm);
 
                 return response;
             });
@@ -62,9 +79,9 @@ namespace Computer.Controllers
                 return request.CreateErrorResponse(HttpStatusCode.NoContent, "Không có dữ liệu");
             }
 
-            var orderVm = Mapper.Map<DeparmentType, DeparmentTypeViewModel>(deparmentType);
+            var deparmentTypeViewModel = Mapper.Map<DeparmentType, DeparmentTypeViewModel>(deparmentType);
 
-            return request.CreateResponse(HttpStatusCode.OK, orderVm);
+            return request.CreateResponse(HttpStatusCode.OK, deparmentTypeViewModel);
         }
 
         [HttpPost]
@@ -76,7 +93,7 @@ namespace Computer.Controllers
                 HttpResponseMessage response = null;
                 if (!ModelState.IsValid)
                 {
-                    request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                    response = request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState.Values.FirstOrDefault()?.Errors.FirstOrDefault()?.ErrorMessage);
                 }
                 else
                 {
@@ -101,7 +118,7 @@ namespace Computer.Controllers
                 HttpResponseMessage response = null;
                 if (!ModelState.IsValid)
                 {
-                    request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                    response = request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState.Values.FirstOrDefault()?.Errors.FirstOrDefault()?.ErrorMessage);
                 }
                 else
                 {
@@ -125,7 +142,7 @@ namespace Computer.Controllers
                 HttpResponseMessage response;
                 if (!ModelState.IsValid)
                 {
-                    response = request.CreateResponse(HttpStatusCode.BadRequest, ModelState);
+                    response = request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState.Values.FirstOrDefault()?.Errors.FirstOrDefault()?.ErrorMessage);
                 }
                 else
                 {
