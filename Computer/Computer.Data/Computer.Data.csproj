@@ -88,6 +88,7 @@
     <Compile Include="Repositories\ColorRepository.cs" />
     <Compile Include="Repositories\ComputerRepository.cs" />
     <Compile Include="Repositories\ComputerTypeRepository.cs" />
+    <Compile Include="Repositories\ComputerUsingHistoryRepository.cs" />
     <Compile Include="Repositories\ContactDetailRepository.cs" />
     <Compile Include="Repositories\DeparmentTypeRepository.cs" />
     <Compile Include="Repositories\ErrorRepository.cs" />
