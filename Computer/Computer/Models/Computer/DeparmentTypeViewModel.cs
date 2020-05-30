@@ -8,10 +8,13 @@ namespace Computer.Models.Computer
     {
         public int DeparmentTypeId { get; set; }
 
+        [StringLength(10, ErrorMessage = "DeparmentTypeCode không được quá 10 ký tự")]
         public string DeparmentTypeCode { get; set; }
 
+        [StringLength(50, ErrorMessage = "DeparmentTypeName không được quá 10 ký tự")]
         public string DeparmentTypeName { get; set; }
 
+        [StringLength(250, ErrorMessage = "DeparmentTypeDescription không được quá 250 ký tự")]
         public string DeparmentTypeDescription { get; set; }
 
         public virtual IEnumerable<ComputerViewModel> Computers { get; set; }
@@ -30,5 +33,14 @@ namespace Computer.Models.Computer
 
         [Required(ErrorMessage = "Yêu cầu nhập trạng thái")]
         public bool Status { set; get; }
+    }
+    
+    public class DeparmentTypeSelectListViewModel
+    {
+        public int DeparmentTypeId { get; set; }
+
+        public string DeparmentTypeCode { get; set; }
+
+        public string DeparmentTypeName { get; set; }
     }
 }
