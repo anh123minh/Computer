@@ -80,6 +80,25 @@ namespace Computer.Infrastructure.Extensions
             computerType.Status = computerTypeVm.Status;
         }
 
+        public static void UpdateComputerUsingHistory(this ComputerUsingHistory computerUsingHistory, ComputerUsingHistoryViewModel computerUsingHistoryVm)
+        {
+            computerUsingHistory.ComputerUsingHistoryId = computerUsingHistoryVm.ComputerUsingHistoryId;
+            computerUsingHistory.ComputerId = computerUsingHistoryVm.ComputerId;
+            computerUsingHistory.UserId = computerUsingHistoryVm.UserId;
+            computerUsingHistory.StartTime = computerUsingHistoryVm.StartTime;
+            computerUsingHistory.EndTime = computerUsingHistoryVm.EndTime;
+            computerUsingHistory.StartTime = computerUsingHistoryVm.StartTime;
+            computerUsingHistory.EndTime = computerUsingHistoryVm.EndTime;
+
+            computerUsingHistory.CreatedDate = computerUsingHistoryVm.CreatedDate;
+            computerUsingHistory.CreatedBy = computerUsingHistoryVm.CreatedBy;
+            computerUsingHistory.UpdatedDate = computerUsingHistoryVm.UpdatedDate;
+            computerUsingHistory.UpdatedBy = computerUsingHistoryVm.UpdatedBy;
+            computerUsingHistory.MetaKeyword = computerUsingHistoryVm.MetaKeyword;
+            computerUsingHistory.MetaDescription = computerUsingHistoryVm.MetaDescription;
+            computerUsingHistory.Status = computerUsingHistoryVm.Status;
+        }
+
         public static void UpdatePostCategory(this PostCategory postCategory, PostCategoryViewModel postCategoryVm)
         {
             postCategory.ID = postCategoryVm.ID;
