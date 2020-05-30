@@ -16,7 +16,7 @@ namespace Computer.Controllers
     [RoutePrefix("api/Announcement")]
     public class AnnouncementController : ApiControllerBase
     {
-        private IAnnouncementService _announcementService;
+        private readonly IAnnouncementService _announcementService;
 
         public AnnouncementController(IErrorService errorService,
             IAnnouncementService announcementService)

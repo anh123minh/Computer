@@ -12,16 +12,20 @@ namespace Computer.Service
     public interface IPermissionService
     {
         ICollection<Permission> GetByFunctionId(string functionId);
+
         ICollection<Permission> GetByUserId(string userId);
+
         void Add(Permission permission);
+
         void DeleteAll(string functionId);
+
         void SaveChange();
     }
 
     public class PermissionService : IPermissionService
     {
-        private IPermissionRepository _permissionRepository;
-        private IUnitOfWork _unitOfWork;
+        private readonly IPermissionRepository _permissionRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public PermissionService(IPermissionRepository permissionRepository, IUnitOfWork unitOfWork)
         {

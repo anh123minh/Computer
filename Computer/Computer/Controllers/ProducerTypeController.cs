@@ -14,11 +14,11 @@ namespace Computer.Controllers
 {
     [Authorize]
     [RoutePrefix("api/producerType")]
-    public class ProducerController : ApiControllerBase
+    public class ProducerTypeController : ApiControllerBase
     {
         private readonly IProducerTypeService _producerTypeService;
 
-        public ProducerController(IErrorService errorService, IProducerTypeService producerTypeService) : base(errorService)
+        public ProducerTypeController(IErrorService errorService, IProducerTypeService producerTypeService) : base(errorService)
         {
             _producerTypeService = producerTypeService;
         }

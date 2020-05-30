@@ -14,11 +14,11 @@ namespace Computer.Controllers
 {
     [Authorize]
     [RoutePrefix("api/deparmentType")]
-    public class DeparmentController : ApiControllerBase
+    public class DeparmentTypeController : ApiControllerBase
     {
         private readonly IDeparmentTypeService _deparmentTypeService;
 
-        public DeparmentController(IErrorService errorService, IDeparmentTypeService deparmentTypeService) : base(errorService)
+        public DeparmentTypeController(IErrorService errorService, IDeparmentTypeService deparmentTypeService) : base(errorService)
         {
             _deparmentTypeService = deparmentTypeService;
         }

@@ -13,8 +13,8 @@ namespace Computer.Service
 
     public class ErrorService : IErrorService
     {
-        private IErrorRepository _errorRepository;
-        private IUnitOfWork _unitOfWork;
+        private readonly IErrorRepository _errorRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public ErrorService(IErrorRepository errorRepository, IUnitOfWork unitOfWork)
         {

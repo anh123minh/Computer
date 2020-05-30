@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +11,6 @@ using Computer.Model.Models;
 using Computer.Service;
 using Computer.Infrastructure.Core;
 using Computer.Infrastructure.Extensions;
-using Computer.Models;
 using Computer.Models.DataContracts;
 using Computer.Models.System;
 
@@ -154,7 +152,7 @@ namespace Computer.Controllers
 
 
                 }
-                var functions = _functionService.GetAllWithParentID(data.FunctionId);
+                var functions = _functionService.GetAllWithParentId(data.FunctionId);
                 if (functions.Any())
                 {
                     foreach (var item in functions)

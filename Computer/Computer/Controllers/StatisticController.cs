@@ -15,19 +15,7 @@ namespace Computer.Controllers
         {
             _statisticService = statisticService;
         }
-
-        [Route("getrevenue")]
-        [HttpGet]
-        public HttpResponseMessage GetRevenueStatistic(HttpRequestMessage request, string fromDate, string toDate)
-        {
-            return CreateHttpResponse(request, () =>
-            {
-                var model = _statisticService.GetRevenueStatistic(fromDate, toDate);
-                HttpResponseMessage response = request.CreateResponse(HttpStatusCode.OK, model);
-                return response;
-            });
-        }
-
+        
         [Route("getComputerStatisticByComputerType")]
         [HttpGet]
         public HttpResponseMessage GetComputerStatisticByComputerType(HttpRequestMessage request)

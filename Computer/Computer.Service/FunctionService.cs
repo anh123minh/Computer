@@ -15,7 +15,7 @@ namespace Computer.Service
 
         IEnumerable<Function> GetAllWithPermission(string userId);
 
-        IEnumerable<Function> GetAllWithParentID(string parentId);
+        IEnumerable<Function> GetAllWithParentId(string parentId);
 
         Function Get(string id);
 
@@ -29,8 +29,8 @@ namespace Computer.Service
 
     public class FunctionService : IFunctionService
     {
-        private IFunctionRepository _functionRepository;
-        private IUnitOfWork _unitOfWork;
+        private readonly IFunctionRepository _functionRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public FunctionService(IFunctionRepository functionRepository, IUnitOfWork unitOfWork)
         {
@@ -68,7 +68,7 @@ namespace Computer.Service
             return query.OrderBy(x => x.ParentId);
         }
 
-        public IEnumerable<Function> GetAllWithParentID(string parentId)
+        public IEnumerable<Function> GetAllWithParentId(string parentId)
         {
             return _functionRepository.GetMulti(x => x.ParentId == parentId);
         }

@@ -33,9 +33,7 @@ namespace Computer.Model.Models
             // Add custom user claims here
             return userIdentity;
         }
-
-        public virtual IEnumerable<Order> Orders { set; get; }
-
+        
         public virtual IEnumerable<ComputerUsingHistory> ComputerUsingHistories { set; get; }
     }
 }

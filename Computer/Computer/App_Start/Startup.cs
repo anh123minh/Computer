@@ -3,7 +3,6 @@ using Owin;
 using Autofac;
 using System.Reflection;
 using Computer.Data.Infrastructure;
-using Computer.Data.Repositories;
 using Computer.Service;
 using System.Web.Mvc;
 using System.Web.Http;
@@ -50,12 +49,12 @@ namespace Computer
             builder.Register(c => app.GetDataProtectionProvider()).InstancePerRequest();
 
             // Repositories
-            builder.RegisterAssemblyTypes(typeof(PostCategoryRepository).Assembly)
+            builder.RegisterAssemblyTypes(typeof(ComputerRepository).Assembly)
                 .Where(t => t.Name.EndsWith("Repository"))
                 .AsImplementedInterfaces().InstancePerRequest();
 
             // Services
-            builder.RegisterAssemblyTypes(typeof(PostCategoryService).Assembly)
+            builder.RegisterAssemblyTypes(typeof(ComputerService).Assembly)
                 .Where(t => t.Name.EndsWith("Service"))
                 .AsImplementedInterfaces().InstancePerRequest();
 

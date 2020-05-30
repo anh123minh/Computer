@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Computer.Data.Infrastructure;
 using Computer.Data.Repositories;
@@ -31,10 +30,10 @@ namespace Computer.Service
 
     public class AnnouncementService : IAnnouncementService
     {
-        private IAnnouncementRepository _announcementRepository;
-        private IAnnouncementUserRepository _announcementUserRepository;
+        private readonly IAnnouncementRepository _announcementRepository;
+        private readonly IAnnouncementUserRepository _announcementUserRepository;
 
-        private IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
         public AnnouncementService(IAnnouncementRepository announcementRepository,
             IAnnouncementUserRepository announcementUserRepository,

@@ -11,7 +11,6 @@ using Computer.Model.Models;
 using Computer.Service;
 using Computer.Infrastructure.Core;
 using Computer.Infrastructure.Extensions;
-using Computer.Models;
 using Computer.Models.System;
 using Computer.Providers;
 

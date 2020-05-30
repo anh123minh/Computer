@@ -6,12 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Computer.Common.Exceptions;
 using Computer.Model.Models;
 using Computer.Service;
 using Computer.Infrastructure.Core;
 using Computer.Infrastructure.Extensions;
-using Computer.Models;
 using Computer.Models.System;
 
 namespace Computer.Controllers
@@ -20,7 +18,7 @@ namespace Computer.Controllers
     [RoutePrefix("api/function")]
     public class FunctionController : ApiControllerBase
     {
-        private IFunctionService _functionService;
+        private readonly IFunctionService _functionService;
 
         public FunctionController(IErrorService errorService, IFunctionService functionService) : base(errorService)
         {
