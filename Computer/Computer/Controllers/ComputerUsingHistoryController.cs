@@ -52,9 +52,9 @@ namespace Computer.Controllers
         [Route("detail/{id}")]
         public HttpResponseMessage GetDetailById(HttpRequestMessage request, int id)
         {
-            if (id == 0)
+            if (!_computerUsingHistoryService.CheckExistedId(id))
             {
-                return request.CreateErrorResponse(HttpStatusCode.BadRequest, nameof(id) + " không có giá trị.");
+                return request.CreateErrorResponse(HttpStatusCode.BadRequest, "Id Not Found!");
             }
 
             var computerUsingHistory = _computerUsingHistoryService.GetById(id);
@@ -124,6 +124,10 @@ namespace Computer.Controllers
             return CreateHttpResponse(request, () =>
             {
                 HttpResponseMessage response;
+                if (!_computerUsingHistoryService.CheckExistedId(id))
+                {
+                    return request.CreateErrorResponse(HttpStatusCode.BadRequest, "Id Not Found!");
+                }
                 if (!ModelState.IsValid)
                 {
                     response = request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState.Values.FirstOrDefault()?.Errors.FirstOrDefault()?.ErrorMessage);

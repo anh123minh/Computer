@@ -58,6 +58,22 @@ namespace Computer.Controllers
             });
         }
 
+        [HttpGet]
+        [Route("selectlist")]
+        public HttpResponseMessage GetAppUserSelecList(HttpRequestMessage request)
+        {
+            return CreateHttpResponse(request, () =>
+            {
+                var listUsers = AppUserManager.Users;
+
+                var listUsersVm = Mapper.Map<List<AppUserSelectListViewModel>>(listUsers);
+
+                var response = request.CreateResponse(HttpStatusCode.OK, listUsersVm);
+
+                return response;
+            });
+        }
+
         [Route("detail/{id}")]
         [HttpGet]
         [Permission(Action = "Read", Function = "USER")]

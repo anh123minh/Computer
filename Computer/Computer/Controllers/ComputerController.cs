@@ -50,14 +50,14 @@ namespace Computer.Controllers
         }
 
         [HttpGet]
-        [Route("getall")]
-        public HttpResponseMessage GetAll(HttpRequestMessage request)
+        [Route("selectlist")]
+        public HttpResponseMessage GetComputerSelecList(HttpRequestMessage request)
         {
             return CreateHttpResponse(request, () =>
             {
                 var listComputer = _computerService.GetAll();
 
-                var listComputerVm = Mapper.Map<List<ComputerViewModel>>(listComputer);
+                var listComputerVm = Mapper.Map<List<ComputerSelectListViewModel>>(listComputer);
 
                 var response = request.CreateResponse(HttpStatusCode.OK, listComputerVm);
 
@@ -69,18 +69,18 @@ namespace Computer.Controllers
         [Route("detail/{id}")]
         public HttpResponseMessage GetDetailById(HttpRequestMessage request, int id)
         {
-            if (id == 0)
+            if (!_computerService.CheckExistedId(id))
             {
-                return request.CreateErrorResponse(HttpStatusCode.BadRequest, nameof(id) + " không có giá trị.");
+                return request.CreateErrorResponse(HttpStatusCode.BadRequest, "Id Not Found!");
             }
 
-            var computer = _computerService.GetById(id);
+            var computer = _computerService.GetSingleDeepById(id);
             if (computer == null)
             {
                 return request.CreateErrorResponse(HttpStatusCode.NoContent, "Không có dữ liệu");
             }
 
-            var computerViewModel = Mapper.Map<Model.Models.Computer, ComputerViewModel>(computer);
+            var computerViewModel = Mapper.Map<Model.Models.Computer, ComputerDetailViewModel>(computer);
 
             return request.CreateResponse(HttpStatusCode.OK, computerViewModel);
         }
@@ -141,6 +141,10 @@ namespace Computer.Controllers
             return CreateHttpResponse(request, () =>
             {
                 HttpResponseMessage response = null;
+                if (!_computerService.CheckExistedId(id))
+                {
+                    return request.CreateErrorResponse(HttpStatusCode.BadRequest, "Id Not Found!");
+                }
                 if (!ModelState.IsValid)
                 {
                     response = request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState.Values.FirstOrDefault()?.Errors.FirstOrDefault()?.ErrorMessage);
