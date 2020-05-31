@@ -19,4 +19,13 @@ namespace Computer.Models.System
 
         public ICollection<string> Roles { get; set; }
     }
+
+    public class AppUserSelectListViewModel
+    {
+        public string UserId { set; get; }
+
+        public string FullName { set; get; }
+
+        public string UserName { set; get; }
+    }
 }

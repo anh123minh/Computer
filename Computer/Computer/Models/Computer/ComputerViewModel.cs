@@ -61,13 +61,19 @@ namespace Computer.Models.Computer
 
         public int ComputerTypeId { get; set; }
 
+        public string ComputerTypeCode { get; set; }
+
         public string ComputerTypeName { get; set; }
 
         public int ProducerTypeId { get; set; }
 
+        public string ProducerTypeCode { get; set; }
+
         public string ProducerTypeName { get; set; }
 
         public int DeparmentTypeId { get; set; }
+
+        public string DeparmentTypeCode { get; set; }
 
         public string DeparmentTypeName { get; set; }
 
@@ -87,5 +93,14 @@ namespace Computer.Models.Computer
 
         [Required(ErrorMessage = "Yêu cầu nhập trạng thái")]
         public bool Status { set; get; }
+    }
+
+    public class ComputerSelectListViewModel
+    {
+        public int ComputerId { get; set; }
+
+        public string ComputerCode { get; set; }
+
+        public string ComputerName { get; set; }
     }
 }

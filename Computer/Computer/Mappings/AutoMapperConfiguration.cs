@@ -16,7 +16,14 @@ namespace Computer.Mappings
                 cfg.CreateMap<Model.Models.Computer, ComputerDetailViewModel>()
                     .ForMember(dest => dest.ComputerTypeName, opts => opts.MapFrom(src => src.ComputerType.ComputerTypeName))
                     .ForMember(dest => dest.DeparmentTypeName, opts => opts.MapFrom(src => src.DeparmentType.DeparmentTypeName))
-                    .ForMember(dest => dest.ProducerTypeName, opts => opts.MapFrom(src => src.ProducerType.ProducerTypeName));
+                    .ForMember(dest => dest.ProducerTypeName, opts => opts.MapFrom(src => src.ProducerType.ProducerTypeName))
+                    .ForMember(dest => dest.ComputerTypeCode, opts => opts.MapFrom(src => src.ComputerType.ComputerTypeCode))
+                    .ForMember(dest => dest.DeparmentTypeCode, opts => opts.MapFrom(src => src.DeparmentType.DeparmentTypeCode))
+                    .ForMember(dest => dest.ProducerTypeCode, opts => opts.MapFrom(src => src.ProducerType.ProducerTypeCode));
+                cfg.CreateMap<Model.Models.Computer, ComputerSelectListViewModel>()
+                    .ForMember(dest => dest.ComputerId, opts => opts.MapFrom(src => src.ComputerId))
+                    .ForMember(dest => dest.ComputerCode, opts => opts.MapFrom(src => src.ComputerCode))
+                    .ForMember(dest => dest.ComputerName, opts => opts.MapFrom(src => src.ComputerName));
 
                 cfg.CreateMap<ComputerType, ComputerTypeViewModel>().MaxDepth(2);
                 cfg.CreateMap<ComputerType, ComputerTypeSelectListViewModel>()
@@ -47,6 +54,11 @@ namespace Computer.Mappings
 
                 cfg.CreateMap<AppRole, ApplicationRoleViewModel>();
                 cfg.CreateMap<AppUser, AppUserViewModel>();
+                cfg.CreateMap<AppUser, AppUserSelectListViewModel>()
+                    .ForMember(dest => dest.UserId, opts => opts.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.FullName, opts => opts.MapFrom(src => src.FullName))
+                    .ForMember(dest => dest.UserName, opts => opts.MapFrom(src => src.UserName));
+
                 cfg.CreateMap<Function, FunctionViewModel>();
                 cfg.CreateMap<Permission, PermissionViewModel>();
                 cfg.CreateMap<Announcement, AnnouncementViewModel>();
