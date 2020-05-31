@@ -9,6 +9,8 @@ namespace Computer.Service
 {
     public interface IComputerTypeService
     {
+        bool CheckExistedId(int id);
+
         ComputerType Add(ComputerType computerType);
 
         void Update(ComputerType computerType);
@@ -35,6 +37,11 @@ namespace Computer.Service
         {
             this._computerTypeRepository = computerTypeRepository;
             this._unitOfWork = unitOfWork;
+        }
+
+        public bool CheckExistedId(int id)
+        {
+            return _computerTypeRepository.CheckContains(x => x.ComputerTypeId == id);
         }
 
         public ComputerType Add(ComputerType computerType)

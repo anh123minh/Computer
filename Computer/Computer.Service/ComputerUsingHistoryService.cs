@@ -9,6 +9,8 @@ namespace Computer.Service
 {
     public interface IComputerUsingHistoryService
     {
+        bool CheckExistedId(int id);
+
         ComputerUsingHistory Add(ComputerUsingHistory computerUsingHistory);
 
         void Update(ComputerUsingHistory computerUsingHistory);
@@ -39,6 +41,11 @@ namespace Computer.Service
             this._computerUsingHistoryRepository = computerTypeRepository;
             this._computerRepository = computerRepository;
             this._unitOfWork = unitOfWork;
+        }
+
+        public bool CheckExistedId(int id)
+        {
+            return _computerUsingHistoryRepository.CheckContains(x => x.ComputerUsingHistoryId == id);
         }
 
         public ComputerUsingHistory Add(ComputerUsingHistory computerUsingHistory)

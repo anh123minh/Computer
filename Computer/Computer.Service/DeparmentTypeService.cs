@@ -9,6 +9,8 @@ namespace Computer.Service
 {
     public interface IDeparmentTypeService
     {
+        bool CheckExistedId(int id);
+
         DeparmentType Add(DeparmentType deparmentType);
 
         void Update(DeparmentType deparmentType);
@@ -35,6 +37,11 @@ namespace Computer.Service
         {
             this._deparmentTypeRepository = deparmentTypeRepository;
             this._unitOfWork = unitOfWork;
+        }
+
+        public bool CheckExistedId(int id)
+        {
+            return _deparmentTypeRepository.CheckContains(x => x.DeparmentTypeId == id);
         }
 
         public DeparmentType Add(DeparmentType deparmentType)

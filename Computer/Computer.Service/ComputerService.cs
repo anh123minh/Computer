@@ -8,6 +8,8 @@ namespace Computer.Service
 {
     public interface IComputerService
     {
+        bool CheckExistedId(int id);
+
         Model.Models.Computer Add(Model.Models.Computer computer);
 
         void Update(Model.Models.Computer computer);
@@ -19,6 +21,8 @@ namespace Computer.Service
         IEnumerable<Model.Models.Computer> GetAllPaging(int pageIndex, int pageSize, out int totalRow);
 
         Model.Models.Computer GetById(int id);
+
+        Model.Models.Computer GetSingleDeepById(int id);
 
         void Save();
 
@@ -38,18 +42,30 @@ namespace Computer.Service
             this._unitOfWork = unitOfWork;
         }
 
+        public bool CheckExistedId(int id)
+        {
+            return _computerRepository.CheckContains(x => x.ComputerId == id);
+        }
+
         public Model.Models.Computer Add(Model.Models.Computer computer)
         {
             computer.CreatedDate = DateTime.Now;
             //producerType.CreatedBy = ad //Todo: Add CreatedBy
             computer.UpdatedDate = DateTime.Now;
             //producerType.UpdatedBy = ad //Todo: Add CreatedBy
+            computer.IsBusyNow = false;
             return _computerRepository.Add(computer);
         }
 
         public Model.Models.Computer Delete(int id)
         {
             return _computerRepository.Delete(id);
+        }
+
+        public Model.Models.Computer GetSingleDeepById(int id)
+        {
+            return _computerRepository.GetSingleByCondition(x => x.ComputerId == id,
+                new[] {"ComputerType", "DeparmentType", "ProducerType"});
         }
 
         public IEnumerable<Model.Models.Computer> GetAll()

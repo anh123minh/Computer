@@ -24,6 +24,7 @@ namespace Computer.Service
         void Delete(string id);
 
         void Save();
+
         bool CheckExistedId(string id);
     }
 

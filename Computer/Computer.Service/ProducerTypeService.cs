@@ -9,6 +9,8 @@ namespace Computer.Service
 {
     public interface IProducerTypeService
     {
+        bool CheckExistedId(int id);
+
         ProducerType Add(ProducerType producerType);
 
         void Update(ProducerType producerType);
@@ -35,6 +37,11 @@ namespace Computer.Service
         {
             this._producerTypeRepository = producerTypeRepository;
             this._unitOfWork = unitOfWork;
+        }
+
+        public bool CheckExistedId(int id)
+        {
+            return _producerTypeRepository.CheckContains(x => x.ProducerTypeId == id);
         }
 
         public ProducerType Add(ProducerType producerType)
