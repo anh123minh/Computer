@@ -23,5 +23,11 @@
         public const string CannotDeleteProducerType = "Xóa Producer Type không thành công. Bản ghi đang được sử dụng.";
         public const string CannotDeleteComputer = "Xóa Computer không thành công. Bản ghi đang được sử dụng.";
 
+        public const string CannotFindComputerTypeId = "Không tìm thấy ComputerTypeId.";
+        public const string CannotFindDeparmentTypeId = "Không tìm thấy DeparmentTypeId.";
+        public const string CannotFindProducerTypeId = "Không tìm thấy ProducerTypeId.";
+        public const string CannotFindComputerId = "Không tìm thấy ComputerId.";
+        public const string CannotFindComputerUsingHistoryId = "Không tìm thấy ComputerUsingHistoryId.";
+
     }
 }

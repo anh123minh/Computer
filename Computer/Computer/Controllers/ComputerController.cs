@@ -18,11 +18,20 @@ namespace Computer.Controllers
     public class ComputerController : ApiControllerBase
     {
         private readonly IComputerService _computerService;
+        private readonly IDeparmentTypeService _deparmentTypeService;
+        private readonly IComputerTypeService _computerTypeService;
+        private readonly IProducerTypeService _producerTypeService;
 
-        public ComputerController(IErrorService errorService, IComputerService computerService) :
+        public ComputerController(IErrorService errorService, IComputerService computerService,
+            IDeparmentTypeService deparmentTypeService, IComputerTypeService computerTypeService,
+            IProducerTypeService producerTypeService
+            ) :
             base(errorService)
         {
             _computerService = computerService;
+            _deparmentTypeService = deparmentTypeService;
+            _computerTypeService = computerTypeService;
+            _producerTypeService = producerTypeService;
         }
 
         [HttpGet]
@@ -71,10 +80,8 @@ namespace Computer.Controllers
         [Route("detail/{id}")]
         public HttpResponseMessage GetDetailById(HttpRequestMessage request, int id)
         {
-            if (!_computerService.CheckExistedId(id))
-            {
-                return request.CreateErrorResponse(HttpStatusCode.BadRequest, "Id Not Found!");
-            }
+            HttpResponseMessage errorResponse;
+            if (CheckExistedComputerId(request, id, out errorResponse)) return errorResponse;
 
             var computer = _computerService.GetSingleDeepById(id);
             if (computer == null)
@@ -93,21 +100,16 @@ namespace Computer.Controllers
         {
             return CreateHttpResponse(request, () =>
             {
-                HttpResponseMessage response = null;
-                if (!ModelState.IsValid)
-                {
-                    response = request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState.Values.FirstOrDefault()?.Errors.FirstOrDefault()?.ErrorMessage);
-                }
-                else
-                {
-                    var newComputer = new Model.Models.Computer();
-                    newComputer.UpdateComputer(computerVm);
+                HttpResponseMessage errorResponse;
+                if (AddUpdateComputerValidation(request, computerVm, out errorResponse)) return errorResponse;
 
-                    var computer = _computerService.Add(newComputer);
-                    _computerService.Save();
+                var newComputer = new Model.Models.Computer();
+                newComputer.UpdateComputer(computerVm);
 
-                    response = request.CreateResponse(HttpStatusCode.Created, computer);
-                }
+                var computer = _computerService.Add(newComputer);
+                _computerService.Save();
+
+                var response = request.CreateResponse(HttpStatusCode.Created, computer);
                 return response;
             });
         }
@@ -118,20 +120,15 @@ namespace Computer.Controllers
         {
             return CreateHttpResponse(request, () =>
             {
-                HttpResponseMessage response = null;
-                if (!ModelState.IsValid)
-                {
-                    response = request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState.Values.FirstOrDefault()?.Errors.FirstOrDefault()?.ErrorMessage);
-                }
-                else
-                {
-                    var computerDb = _computerService.GetById(computerVm.ComputerId);
-                    computerDb.UpdateComputer(computerVm);
-                    _computerService.Update(computerDb);
-                    _computerService.Save();
+                HttpResponseMessage errorResponse;
+                if (AddUpdateComputerValidation(request, computerVm, out errorResponse)) return errorResponse;
 
-                    response = request.CreateResponse(HttpStatusCode.OK);
-                }
+                var computerDb = _computerService.GetById(computerVm.ComputerId);
+                computerDb.UpdateComputer(computerVm);
+                _computerService.Update(computerDb);
+                _computerService.Save();
+
+                var response = request.CreateResponse(HttpStatusCode.OK);
                 return response;
             });
         }
@@ -143,10 +140,9 @@ namespace Computer.Controllers
             return CreateHttpResponse(request, () =>
             {
                 HttpResponseMessage response;
-                if (!_computerService.CheckExistedId(id))
-                {
-                    return request.CreateErrorResponse(HttpStatusCode.BadRequest, "Id Not Found!");
-                }
+                HttpResponseMessage errorResponse;
+                if (CheckExistedComputerId(request, id, out errorResponse)) return errorResponse;
+
                 if (!ModelState.IsValid)
                 {
                     response = request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState.Values.FirstOrDefault()?.Errors.FirstOrDefault()?.ErrorMessage);
@@ -167,6 +163,55 @@ namespace Computer.Controllers
                 }
                 return response;
             });
+        }
+
+        private bool CheckExistedComputerId(HttpRequestMessage request, int id, out HttpResponseMessage errorResponse)
+        {
+            if (!_computerService.CheckExistedId(id))
+            {
+                {
+                    errorResponse = request.CreateErrorResponse(HttpStatusCode.BadRequest, CommonConstants.CannotFindComputerId);
+                    return true;
+                }
+            }
+            errorResponse = null;
+            return false;
+        }
+
+        private bool AddUpdateComputerValidation(HttpRequestMessage request, ComputerViewModel computerVm,
+            out HttpResponseMessage errorResponse)
+        {
+            if (!_computerTypeService.CheckExistedId(computerVm.ComputerTypeId))
+            {
+                {
+                    errorResponse = request.CreateErrorResponse(HttpStatusCode.BadRequest, CommonConstants.CannotFindComputerTypeId);
+                    return true;
+                }
+            }
+            if (!_deparmentTypeService.CheckExistedId(computerVm.DeparmentTypeId))
+            {
+                {
+                    errorResponse = request.CreateErrorResponse(HttpStatusCode.BadRequest, CommonConstants.CannotFindDeparmentTypeId);
+                    return true;
+                }
+            }
+            if (!_producerTypeService.CheckExistedId(computerVm.ProducerTypeId))
+            {
+                {
+                    errorResponse = request.CreateErrorResponse(HttpStatusCode.BadRequest, CommonConstants.CannotFindProducerTypeId);
+                    return true;
+                }
+            }
+            if (!ModelState.IsValid)
+            {
+                {
+                    errorResponse = request.CreateErrorResponse(HttpStatusCode.BadRequest,
+                        ModelState.Values.FirstOrDefault()?.Errors.FirstOrDefault()?.ErrorMessage);
+                    return true;
+                }
+            }
+            errorResponse = null;
+            return false;
         }
     }
 }
