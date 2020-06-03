@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -134,10 +135,17 @@ namespace Computer.Controllers
                 }
                 else
                 {
-                    _computerUsingHistoryService.Delete(id);
-                    _computerUsingHistoryService.Save();
+                    try
+                    {
+                        _computerUsingHistoryService.Delete(id);
+                        _computerUsingHistoryService.Save();
 
-                    response = request.CreateResponse(HttpStatusCode.OK);
+                        response = request.CreateResponse(HttpStatusCode.OK);
+                    }
+                    catch (Exception e)
+                    {
+                        response = request.CreateErrorResponse(HttpStatusCode.BadRequest, e.InnerException?.Message);
+                    }                   
                 }
 
                 return response;

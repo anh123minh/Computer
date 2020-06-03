@@ -18,5 +18,10 @@
         public const string AdminChannel = "AdminChannel";
         public const string AnnouncementChannel = "AnnouncementChannel";
 
+        public const string CannotDeleteComputerType = "Xóa Computer Type không thành công. Bản ghi đang được sử dụng.";
+        public const string CannotDeleteDeparmentType = "Xóa Deparment Type không thành công. Bản ghi đang được sử dụng.";
+        public const string CannotDeleteProducerType = "Xóa Producer Type không thành công. Bản ghi đang được sử dụng.";
+        public const string CannotDeleteComputer = "Xóa Computer không thành công. Bản ghi đang được sử dụng.";
+
     }
 }

@@ -1,9 +1,11 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Computer.Common;
 using Computer.Infrastructure.Core;
 using Computer.Service;
 using Computer.Infrastructure.Extensions;
@@ -140,7 +142,7 @@ namespace Computer.Controllers
         {
             return CreateHttpResponse(request, () =>
             {
-                HttpResponseMessage response = null;
+                HttpResponseMessage response;
                 if (!_computerService.CheckExistedId(id))
                 {
                     return request.CreateErrorResponse(HttpStatusCode.BadRequest, "Id Not Found!");
@@ -151,10 +153,17 @@ namespace Computer.Controllers
                 }
                 else
                 {
-                    _computerService.Delete(id);
-                    _computerService.Save();
+                    try
+                    {
+                        _computerService.Delete(id);
+                        _computerService.Save();
 
-                    response = request.CreateResponse(HttpStatusCode.OK);
+                        response = request.CreateResponse(HttpStatusCode.OK);
+                    }
+                    catch (Exception)
+                    {
+                        response = request.CreateErrorResponse(HttpStatusCode.BadRequest, CommonConstants.CannotDeleteComputer);
+                    }                                    
                 }
                 return response;
             });

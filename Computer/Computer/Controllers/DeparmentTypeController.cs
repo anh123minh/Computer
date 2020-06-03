@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using AutoMapper;
+using Computer.Common;
 using Computer.Infrastructure.Core;
 using Computer.Infrastructure.Extensions;
 using Computer.Model.Models;
@@ -150,10 +152,17 @@ namespace Computer.Controllers
                 }
                 else
                 {
-                    _deparmentTypeService.Delete(id);
-                    _deparmentTypeService.Save();
-                    
-                    response = request.CreateResponse(HttpStatusCode.OK);
+                    try
+                    {
+                        _deparmentTypeService.Delete(id);
+                        _deparmentTypeService.Save();
+
+                        response = request.CreateResponse(HttpStatusCode.OK);
+                    }
+                    catch (Exception)
+                    {
+                        response = request.CreateErrorResponse(HttpStatusCode.BadRequest, CommonConstants.CannotDeleteDeparmentType);
+                    }                   
                 }
 
                 return response;
