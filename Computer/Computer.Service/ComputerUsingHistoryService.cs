@@ -74,7 +74,7 @@ namespace Computer.Service
 
         public ComputerUsingHistory GetById(int id)
         {
-            var computerUsingHistory = _computerUsingHistoryRepository.GetSingleByCondition(x => x.ComputerUsingHistoryId == id, new [] { "Computer" });
+            var computerUsingHistory = _computerUsingHistoryRepository.GetSingleByCondition(x => x.ComputerUsingHistoryId == id, new [] { "Computer", "AppUser" });
             computerUsingHistory.Computer = _computerRepository.GetSingleByCondition(x => x.ComputerId == computerUsingHistory.ComputerId, new [] { "DeparmentType" });
             return computerUsingHistory;
         }

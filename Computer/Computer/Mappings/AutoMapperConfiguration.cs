@@ -50,7 +50,8 @@ namespace Computer.Mappings
                     .ForMember(dest => dest.ComputerName, opts => opts.MapFrom(src => src.Computer.ComputerName))
                     .ForMember(dest => dest.DeparmentTypeId, opts => opts.MapFrom(src => src.Computer.DeparmentType.DeparmentTypeId))
                     .ForMember(dest => dest.DeparmentTypeCode, opts => opts.MapFrom(src => src.Computer.DeparmentType.DeparmentTypeCode))
-                    .ForMember(dest => dest.DeparmentTypeName, opts => opts.MapFrom(src => src.Computer.DeparmentType.DeparmentTypeName));
+                    .ForMember(dest => dest.DeparmentTypeName, opts => opts.MapFrom(src => src.Computer.DeparmentType.DeparmentTypeName))
+                    .ForMember(dest => dest.UserName, opts => opts.MapFrom(src => src.AppUser.UserName));
 
                 cfg.CreateMap<AppRole, ApplicationRoleViewModel>();
                 cfg.CreateMap<AppUser, AppUserViewModel>();

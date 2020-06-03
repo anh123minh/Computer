@@ -58,6 +58,8 @@ namespace Computer.Models.Computer
 
         public string UserId { get; set; }
 
+        public string UserName { get; set; }
+
         public DateTime? CreatedDate { set; get; }
 
         public string CreatedBy { set; get; }

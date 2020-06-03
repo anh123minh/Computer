@@ -39,7 +39,7 @@ namespace Computer.Data.Repositories
 
             query = query.OrderByDescending(x => x.UpdatedDate).Skip((pageIndex - 1) * pageSize).Take(pageSize);
 
-            return query.Include(x => x.Computer).Include(x => x.Computer.DeparmentType);
+            return query.Include(x => x.Computer).Include(x => x.Computer.DeparmentType).Include(x => x.AppUser);
         }
     }
 }
