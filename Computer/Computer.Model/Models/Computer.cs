@@ -41,6 +41,6 @@ namespace Computer.Model.Models
         [ForeignKey("DeparmentTypeId")]
         public virtual DeparmentType DeparmentType { get; set; }
 
-        public virtual IEnumerable<ComputerUsingHistory> ComputerUsingHistories { get; set; }
+        public virtual ICollection<ComputerUsingHistory> ComputerUsingHistories { get; set; }
     }
 }

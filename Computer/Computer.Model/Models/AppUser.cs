@@ -34,6 +34,6 @@ namespace Computer.Model.Models
             return userIdentity;
         }
         
-        public virtual IEnumerable<ComputerUsingHistory> ComputerUsingHistories { set; get; }
+        public virtual ICollection<ComputerUsingHistory> ComputerUsingHistories { set; get; }
     }
 }

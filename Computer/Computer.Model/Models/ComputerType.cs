@@ -21,6 +21,6 @@ namespace Computer.Model.Models
         [MaxLength(250)]
         public string ComputerTypeDescription { get; set; }
 
-        public virtual IEnumerable<Computer> Computers { get; set; }
+        public virtual ICollection<Computer> Computers { get; set; }
     }
 }

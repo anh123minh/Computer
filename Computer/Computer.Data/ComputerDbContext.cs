@@ -39,6 +39,36 @@ namespace Computer.Data
             builder.Entity<IdentityUserRole>().HasKey(i => new { i.UserId, i.RoleId }).ToTable("AppUserRoles");
             builder.Entity<IdentityUserLogin>().HasKey(i => i.UserId).ToTable("AppUserLogins");
             builder.Entity<IdentityUserClaim>().HasKey(i => i.UserId).ToTable("AppUserClaims");
+
+            BuildCommeceModelCreating(builder);
+        }
+
+        private static void BuildCommeceModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ComputerType>()
+                .HasMany(e => e.Computers)
+                .WithRequired(e => e.ComputerType)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<DeparmentType>()
+                .HasMany(e => e.Computers)
+                .WithRequired(e => e.DeparmentType)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ProducerType>()
+                .HasMany(e => e.Computers)
+                .WithRequired(e => e.ProducerType)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Model.Models.Computer>()
+                .HasMany(e => e.ComputerUsingHistories)
+                .WithRequired(e => e.Computer)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<AppUser>()
+                .HasMany(e => e.ComputerUsingHistories)
+                .WithRequired(e => e.AppUser)
+                .WillCascadeOnDelete(false);
         }
     }
 }
